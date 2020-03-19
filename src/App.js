@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 
 import ProtectedRoute from "./components/UserNameRoute";
 import Jukebox from "./Jukebox";
 import UserNameProv from "./UserNameProv";
 import Login from "./Login";
-
-export const SocketContext = React.createContext();
+import Welcome from "./Welcome";
+import SocketProv from "./SocketProv";
 
 function App() { 
-  const socket = io("http://localhost:5000");
   const location = useLocation();
-  console.log(location);
-  socket.on("connect", () => {
-    socket.emit("joinRoom", location);
-  });
   return (
     <UserNameProv>
-      <SocketContext.Provider value={socket}>
+      <SocketProv>
         <Switch>
           <Route path={`/username`}>
             <Login />
@@ -26,8 +20,11 @@ function App() {
           <ProtectedRoute path={`${location.pathname}`}>
             <Jukebox />
           </ProtectedRoute>
+          <Route path="/">
+            <Welcome />
+          </Route>
         </Switch>
-      </SocketContext.Provider>
+      </SocketProv>
     </UserNameProv>
   );
 }
