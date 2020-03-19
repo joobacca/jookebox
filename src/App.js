@@ -1,37 +1,34 @@
-import React from "react";
-import { Button } from "@material-ui/core";
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
+import { Switch, Route, useLocation } from "react-router-dom";
 
-const SocketContext = React.createContext();
+import ProtectedRoute from "./components/UserNameRoute";
+import Jukebox from "./Jukebox";
+import UserNameProv from "./UserNameProv";
+import Login from "./Login";
 
-function App() {
-  const socket = io('http://localhost:5000');
-  console.log(window.location.pathname);
-  socket.on('connect', args => {
-    socket.emit('joinRoom', window.location.pathname);
-    console.log(args);
+export const SocketContext = React.createContext();
+
+function App() { 
+  const socket = io("http://localhost:5000");
+  const location = useLocation();
+  console.log(location);
+  socket.on("connect", () => {
+    socket.emit("joinRoom", location);
   });
   return (
-    <SocketContext.Provider value={socket}>
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <Button variant="contained" color="primary">
-            hi
-          </Button>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    </SocketContext.Provider>
+    <UserNameProv>
+      <SocketContext.Provider value={socket}>
+        <Switch>
+          <Route path={`/username`}>
+            <Login />
+          </Route>
+          <ProtectedRoute path={`${location.pathname}`}>
+            <Jukebox />
+          </ProtectedRoute>
+        </Switch>
+      </SocketContext.Provider>
+    </UserNameProv>
   );
 }
 
