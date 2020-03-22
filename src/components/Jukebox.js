@@ -1,19 +1,21 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import SocketProvider from './SocketProvider';
 import { UserNameContext } from './UserNameProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
-import Controller from './player/Controller';
+// import Controller from './player/Controller';
+import TogglePlaybackButton from './TogglePlaybackButton'
 
 const Jukebox = () => {
   const [username] = useContext(UserNameContext);
-  const playerRef = useRef();
   return (
     <SocketProvider>
       <div>Willkommen, {username}</div>
       <Search />
-      <YoutubePlayer referenz={playerRef} />
-      <Controller playerRef={playerRef} />
+      <YoutubePlayer>
+        <TogglePlaybackButton />
+      </YoutubePlayer>
+      {/* <Controller playerRef={playerRef} /> */}
     </SocketProvider>
   );
 };
