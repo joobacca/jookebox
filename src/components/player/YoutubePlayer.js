@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 import './player.css';
 
 const defaultProps = {
-  playing: true,
+  playing: false,
   loop: false,
   controls: false,
   volume: 0.2,
