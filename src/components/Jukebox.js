@@ -8,6 +8,10 @@ import Controller from './player/Controller';
 const Jukebox = () => {
   const [username] = useContext(UserNameContext);
   const playerRef = useRef();
+  React.useLayoutEffect(() => {
+    console.log(playerRef);
+    
+  })
   return (
     <SocketProvider>
       <div>Willkommen, {username}</div>
