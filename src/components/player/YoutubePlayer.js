@@ -1,5 +1,5 @@
 import React from 'react';
-import Youtube from 'react-player';
+import ReactPlayer from 'react-player';
 import './player.css';
 
 const defaultProps = {
@@ -16,9 +16,9 @@ const defaultProps = {
   },
 };
 
-const Player = ({ referenz }) => {
+const YoutubePlayer = ({ referenz }) => {
   return (
-    <Youtube
+    <ReactPlayer
       url="https://www.youtube.com/watch?v=e1szcpyzsAE"
       ref={referenz}
       {...defaultProps}
@@ -26,4 +26,4 @@ const Player = ({ referenz }) => {
   );
 };
 
-export default Player;
+export default YoutubePlayer;

@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import SocketProvider from './SocketProvider';
 import { UserNameContext } from './UserNameProvider';
 import Search from './search/Search';
-import YoutubePlayer from './player/Player';
+import YoutubePlayer from './player/YoutubePlayer';
 import Controller from './player/Controller';
 
 const Jukebox = () => {
