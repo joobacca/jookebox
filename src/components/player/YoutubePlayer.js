@@ -18,34 +18,38 @@ const defaultProps = {
 
 const YoutubePlayerContext = React.createContext();
 
-const YoutubePlayer = ({ children }) => {
-  const ref = React.useRef();
-  const value = {
-    ref,
-    player: ref.current?.getInternalPlayer(),
-    togglePlayer: () =>
-      ref.current.getInternalPlayer().getPlayerState() === 1
-        ? ref.current.getInternalPlayer().pauseVideo()
-        : ref.current.getInternalPlayer().playVideo(),
-  };
+const YoutubePlayer = ({ playerRef }) => {
   return (
-    <>
-      <ReactPlayer
-        ref={ref}
-        url="https://www.youtube.com/watch?v=e1szcpyzsAE"
-        {...defaultProps}
-      />
-      <YoutubePlayerContext.Provider value={value}>
-        {children}
-      </YoutubePlayerContext.Provider>
-    </>
+    <ReactPlayer
+      ref={playerRef}
+      url="https://www.youtube.com/watch?v=e1szcpyzsAE"
+      {...defaultProps}
+    />
   );
 };
+
+export function YoutubePlayerProvider({ playerRef, children }) {
+  const value = {
+    playerRef,
+    player: playerRef.current?.getInternalPlayer(),
+    togglePlayer: () =>
+      playerRef.current.getInternalPlayer().getPlayerState() === 1
+        ? playerRef.current.getInternalPlayer().pauseVideo()
+        : playerRef.current.getInternalPlayer().playVideo(),
+  };
+  return (
+    <YoutubePlayerContext.Provider value={value}>
+      {children}
+    </YoutubePlayerContext.Provider>
+  );
+}
 
 export function useYoutubePlayer() {
   const ctx = React.useContext(YoutubePlayerContext);
   if (!ctx) {
-    throw new Error(`Please use this hook only in components wrapped in YoutubePlayer`);
+    throw new Error(
+      `Please use this hook only in components wrapped in YoutubePlayerProvider`,
+    );
   }
 
   return ctx;
