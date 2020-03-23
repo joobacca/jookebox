@@ -5,7 +5,7 @@ import { SocketContext } from '../contexts/SocketProvider';
 import Button from '@material-ui/core/Button';
 import SearchResultList from './SearchResultList';
 import Spinner from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +17,12 @@ const useStyles = makeStyles(theme => ({
   },
   grow: {
     flexGrow: 1,
+  },
+  wrapper: {
+    minHeight: '300px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 
@@ -54,7 +60,11 @@ const Search = () => {
       <form onSubmit={search} className={classes.form}>
         <Grid container spacing={2}>
           <Grid item xs>
-            <TextInput onChange={e => setVal(e.target.value)} value={val} style={{ width: '100%'}} />
+            <TextInput
+              onChange={e => setVal(e.target.value)}
+              value={val}
+              style={{ width: '100%' }}
+            />
           </Grid>
           <Grid item>
             <Button type="submit">Suche</Button>
@@ -62,7 +72,13 @@ const Search = () => {
         </Grid>
       </form>
       <Grid item xs={12}>
-        {renderList()}
+        <ThemeProvider
+          theme={createMuiTheme({ palette: { text: { secondary: 'black' } } })}
+        >
+          <div className={classes.wrapper}>
+            {result === null ? <Spinner /> : <SearchResultList data={result} />}
+          </div>
+        </ThemeProvider>
       </Grid>
     </Grid>
   );

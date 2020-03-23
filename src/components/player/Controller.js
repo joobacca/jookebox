@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1,
   },
-  button: {
-
-  }
 }));
 
 const Volume = withStyles({
@@ -31,13 +28,20 @@ const Volume = withStyles({
   },
 })(Slider);
 
+const Progress = withStyles({
+  root: {
+    color: '#fff',
+  },
+})(Slider);
+
 const Controller = ({ playerRef }) => {
   const socket = useContext(SocketContext);
   const appState = useAppState();
+  const classes = useStyles();
 
-  socket.on('playVideo', id => {
-    console.log('Server said play video :' + id);
-    appState.video.set(id);
+  socket.on('playVideo', video => {
+    console.log('Server said play video :' + video);
+    appState.video.set(video);
   });
 
   socket.on('synchronize', playList => {
@@ -45,28 +49,36 @@ const Controller = ({ playerRef }) => {
     appState.playList.set(playList);
   });
 
-  // socket.on('playVideo', id => {
-  //   console.log('Server said next video');
-  //   appState.video.set(appState.playList[0]);
-  // });
+  socket.on('setProgress', value => {
+    appState.progress.set(Math.floor(value * 100) / 100);
+    playerRef.current.getInternalPlayer().seekTo(getSeconds(value));
+  });
 
-  const toggleVideo = () => {
-    playerRef.current.getInternalPlayer().getPlayerState() === 1
-      ? playerRef.current.getInternalPlayer().pauseVideo()
-      : playerRef.current.getInternalPlayer().playVideo();
-    appState.playBackState.set(!appState.playBackState.current);
+  const togglePlayback = () => {
+    if (playerRef.current.getInternalPlayer()) {
+      playerRef.current.getInternalPlayer().getPlayerState() === 1
+        ? playerRef.current.getInternalPlayer().pauseVideo()
+        : playerRef.current.getInternalPlayer().playVideo();
+      appState.playBackState.set(!appState.playBackState.current);
+    }
   };
 
-  const nextVideo = () => {
-    socket.emit('playNext');
+  const nextVideo = () => socket.emit('playNext');
+
+  const handleVolumeClick = (event, newValue) =>
+    throttle((event, newValue) => {
+      console.log(newValue);
+      setVolume(newValue);
+    }, 50);
+
+  const getSeconds = percent => {
+    return (
+      playerRef.current.getInternalPlayer().getDuration() * (percent / 100)
+    );
   };
 
-  const classes = useStyles();
-
-  const handleChange = throttle((event, newValue) => {
-    console.log(newValue);
-    setVolume(newValue);
-  }, 50);
+  const handleProgressClick = (event, newValue) =>
+    socket.emit('setProgress', newValue);
 
   const setVolume = val => {
     appState.volume.set(val);
@@ -76,32 +88,43 @@ const Controller = ({ playerRef }) => {
   return (
     <AppBar position="fixed" className={classes.appBar} color="primary">
       <ToolBar>
-        <Grid container spacing={2} style={{ width: '300px' }}>
+        <Grid container>
           <Grid item>
-            <VolumeDown onClick={() => setVolume(0)} />
+            <Grid container spacing={2}>
+              <Grid item>
+                <VolumeDown onClick={() => setVolume(0)} />
+              </Grid>
+              <Grid item xs>
+                <Volume
+                  value={appState.volume.current}
+                  onChange={handleVolumeClick}
+                  aria-labelledby="continuous-slider"
+                />
+              </Grid>
+              <Grid item>
+                <VolumeUp onClick={() => setVolume(100)} />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs>
-            <Volume
-              value={appState.volume.current}
-              onChange={handleChange}
-              aria-labelledby="continuous-slider"
+            <Progress
+              value={appState.progress.current}
+              onClick={handleProgressClick}
             />
           </Grid>
           <Grid item>
-            <VolumeUp onClick={() => setVolume(100)} />
+            <IconButton onClick={togglePlayback}>
+              <Typography color="textSecondary">
+                {appState.playBackState.current ? <Pause /> : <Play />}
+              </Typography>
+            </IconButton>
+            <IconButton onClick={nextVideo}>
+              <Typography color="textSecondary">
+                <FastForward />
+              </Typography>
+            </IconButton>
           </Grid>
         </Grid>
-        <div className={classes.grow} />
-        <IconButton onClick={toggleVideo}>
-          <Typography color="textSecondary">
-            {appState.playBackState.current ? <Pause /> : <Play />}
-          </Typography>
-        </IconButton>
-        <IconButton onClick={nextVideo}>
-          <Typography color="textSecondary">
-            <FastForward />
-          </Typography>
-        </IconButton>
       </ToolBar>
     </AppBar>
   );

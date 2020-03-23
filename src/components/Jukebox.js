@@ -6,6 +6,7 @@ import YoutubePlayer from './player/YoutubePlayer';
 import Controller from './player/Controller';
 import AppStateProvider from './contexts/AppStateProvider';
 import Grid from '@material-ui/core/Grid';
+import PlayList from './playlist/PlayList';
 
 const Jukebox = () => {
   const [username] = useUserName();
@@ -13,7 +14,6 @@ const Jukebox = () => {
   return (
     <SocketProvider>
       <AppStateProvider>
-        <div>Willkommen, {username}</div>
         <Grid container>
           <Grid item xs={12} md={3}>
             <Search />
@@ -22,7 +22,7 @@ const Jukebox = () => {
             <YoutubePlayer referenz={playerRef} />
           </Grid>
           <Grid item xs={12} md={3}>
-            adsf
+            <PlayList />
           </Grid>
           <Grid item xs={12}>
             <Controller playerRef={playerRef} />

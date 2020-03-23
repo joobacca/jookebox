@@ -8,7 +8,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import Typography from '@material-ui/core/Typography';
-import { Button, makeStyles } from '@material-ui/core';
+import { IconButton, makeStyles } from '@material-ui/core';
 import { SocketContext } from '../contexts/SocketProvider';
 
 const useStyles = makeStyles(theme => ({
@@ -45,12 +45,27 @@ const Item = ({ data }) => {
         primary={title}
         secondary={description}
       />
-      <Button onClick={() => socket.emit('play', videoId)}>
-        <PlayArrowRoundedIcon />
-      </Button>
-      <Button onClick={() => socket.emit('addToPlaylist', videoId)}>
-        <AddCircleRoundedIcon />
-      </Button>
+      <div>
+        <IconButton
+          onClick={() =>
+            socket.emit('play', { title, videoId, description, author })
+          }
+        >
+          <PlayArrowRoundedIcon />
+        </IconButton>
+        <IconButton
+          onClick={() =>
+            socket.emit('addToPlaylist', {
+              title,
+              videoId,
+              description,
+              author,
+            })
+          }
+        >
+          <AddCircleRoundedIcon />
+        </IconButton>
+      </div>
     </ListItem>
   );
 };
