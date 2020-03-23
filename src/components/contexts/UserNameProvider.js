@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from 'react';
 
 export const UserNameContext = React.createContext();
 
@@ -47,6 +47,15 @@ const UserNameProvider = ({ children }) => {
       {children}
     </UserNameContext.Provider>
   );
+};
+
+export const useUserName = () => {
+  const userName = useContext(UserNameContext);
+  if (!userName)
+    throw new Error(
+      `Please use this hook only in components wrapped in UserNameProvider`,
+    );
+  return userName;
 };
 
 export default UserNameProvider;

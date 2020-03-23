@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import './player.css';
+import { useAppState } from '../contexts/AppStateProvider';
 
 const defaultProps = {
   playing: false,
@@ -17,10 +17,15 @@ const defaultProps = {
 };
 
 const YoutubePlayer = ({ referenz }) => {
+  const {
+    video: { current },
+  } = useAppState();
   return (
     <ReactPlayer
-      url="https://www.youtube.com/watch?v=e1szcpyzsAE"
+      url={`https://www.youtube.com/watch?v=${current}`}
       ref={referenz}
+      sameSite="none"
+      secure="true"
       {...defaultProps}
     />
   );

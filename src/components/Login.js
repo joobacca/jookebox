@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { UserNameContext } from "./UserNameProvider";
+import { UserNameContext } from "./contexts/UserNameProvider";
 
 import { makeStyles } from "@material-ui/core/styles";
 

@@ -10,5 +10,9 @@ export default createMuiTheme({
     secondary: {
       main: '#FF7F51',
     },
+    text: {
+      primary: '#000',
+      secondary: '#fff',
+    },
   },
 });

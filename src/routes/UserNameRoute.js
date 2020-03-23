@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserNameContext } from "../components/UserNameProvider";
+import { UserNameContext } from "../components/contexts/UserNameProvider";
 import { Route, Redirect, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({ children, ...rest }) => {

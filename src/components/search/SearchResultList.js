@@ -8,8 +8,14 @@ import Avatar from '@material-ui/core/Avatar';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
-import { SocketContext } from '../SocketProvider';
+import { Button, makeStyles } from '@material-ui/core';
+import { SocketContext } from '../contexts/SocketProvider';
+
+const useStyles = makeStyles(theme => ({
+  secondary: {
+    color: 'black',
+  },
+}));
 
 const SearchResultList = ({ data }) => {
   return (
@@ -27,17 +33,23 @@ const SearchResultList = ({ data }) => {
 const Item = ({ data }) => {
   const socket = React.useContext(SocketContext);
   const { title, url, description, thumbnail, author, videoId } = data;
+
+  const classes = useStyles();
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
         <Avatar alt="" src={thumbnail} />
       </ListItemAvatar>
-      <ListItemText primary={title} secondary={description} />
+      <ListItemText
+        className={classes}
+        primary={title}
+        secondary={description}
+      />
       <Button onClick={() => socket.emit('play', videoId)}>
-        <AddCircleRoundedIcon />
-      </Button>
-      <Button>
         <PlayArrowRoundedIcon />
+      </Button>
+      <Button onClick={() => socket.emit('addToPlaylist', videoId)}>
+        <AddCircleRoundedIcon />
       </Button>
     </ListItem>
   );

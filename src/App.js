@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import ProtectedRoute from './routes/UserNameRoute';
 import Jukebox from './components/Jukebox';
-import UserNameProvider from './components/UserNameProvider';
+import UserNameProvider from './components/contexts/UserNameProvider';
 import Login from './components/Login';
 import Welcome from './components/Welcome';
 import { ThemeProvider } from '@material-ui/core';
