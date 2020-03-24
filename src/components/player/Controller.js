@@ -38,21 +38,32 @@ const Progress = withStyles({
 
 const Controller = ({ playerRef }) => {
   const socket = useContext(SocketContext);
-  const appState = useAppState();
+  const {
+    video,
+    progress,
+    playBackState,
+    volume,
+  } = useAppState();
   const classes = useStyles();
 
   socket.on('playVideo', video => {
-    console.log('Server said play video :' + video);
-    appState.video.set(video);
+    video.set(video);
   });
 
   socket.on('setProgress', value => {
-    appState.progress.set(Math.floor(value * 100) / 100);
+    progress.set(Math.floor(value * 100) / 100);
     playerRef.current.getInternalPlayer().seekTo(getSeconds(value));
   });
 
+  socket.on('toggle', ({ state, time }) => {
+    playBackState.set(state);
+  });
+
   const togglePlayback = () => {
-    appState.playBackState.set(!appState.playBackState.current);
+    socket.emit('toggle', {
+      state: playBackState.current,
+      time: playerRef.current.getInternalPlayer().getCurrentTime(),
+    });
   };
 
   const nextVideo = () => socket.emit('playNext');
@@ -71,7 +82,7 @@ const Controller = ({ playerRef }) => {
   const setVolume = val => {
     // React-Player accepts values between 1 and 0, while
     // the Mui-Slider gives values between 100 and 0
-    appState.volume.set(val);
+    volume.set(val);
   };
 
   return (
@@ -85,7 +96,7 @@ const Controller = ({ playerRef }) => {
               </Grid>
               <Grid item xs>
                 <Volume
-                  value={appState.volume.current}
+                  value={volume.current}
                   onChange={handleVolumeClick}
                   aria-labelledby="continuous-slider"
                 />
@@ -97,14 +108,14 @@ const Controller = ({ playerRef }) => {
           </Grid>
           <Grid item xs>
             <Progress
-              value={appState.progress.current}
+              value={progress.current}
               onChange={handleProgressClick}
             />
           </Grid>
           <Grid item>
             <IconButton onClick={togglePlayback}>
               <Typography color="textSecondary">
-                {appState.playBackState.current ? <Pause /> : <Play />}
+                {playBackState.current ? <Pause /> : <Play />}
               </Typography>
             </IconButton>
             <IconButton onClick={nextVideo}>
