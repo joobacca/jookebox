@@ -10,7 +10,7 @@ const SocketProv = React.memo(({ children }) => {
   socket.on('connect', () => {
     socket.emit('joinRoom', location.pathname);
   });
-
+  // comment because build not triggering
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
