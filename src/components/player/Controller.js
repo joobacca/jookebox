@@ -25,12 +25,14 @@ const useStyles = makeStyles(theme => ({
 const Volume = withStyles({
   root: {
     color: '#fff',
+    width: '300px',
   },
 })(Slider);
 
 const Progress = withStyles({
   root: {
     color: '#fff',
+    height: '100%',
   },
 })(Slider);
 
@@ -44,51 +46,33 @@ const Controller = ({ playerRef }) => {
     appState.video.set(video);
   });
 
-  socket.on('synchronize', playList => {
-    console.log('Server said next video');
-    appState.playList.set(playList);
-  });
-
   socket.on('setProgress', value => {
     appState.progress.set(Math.floor(value * 100) / 100);
     playerRef.current.getInternalPlayer().seekTo(getSeconds(value));
   });
 
   const togglePlayback = () => {
-    if (playerRef.current.getInternalPlayer()) {
-      playerRef.current.getInternalPlayer().getPlayerState() === 1
-        ? playerRef.current.getInternalPlayer().pauseVideo()
-        : playerRef.current.getInternalPlayer().playVideo();
-      appState.playBackState.set(!appState.playBackState.current);
-    }
+    appState.playBackState.set(!appState.playBackState.current);
   };
 
   const nextVideo = () => socket.emit('playNext');
 
-  const handleVolumeClick = (event, newValue) =>
-    throttle((event, newValue) => {
-      console.log(newValue);
-      setVolume(newValue);
-    }, 50);
+  const handleVolumeClick = (event, newValue) => setVolume(newValue);
 
-  const getSeconds = percent => {
-    return (
-      playerRef.current.getInternalPlayer().getDuration() * (percent / 100)
-    );
-  };
+  const getSeconds = percent =>
+    playerRef.current.getInternalPlayer().getDuration() * (percent / 100);
 
   const handleProgressClick = (event, newValue) =>
     socket.emit('setProgress', newValue);
 
   const setVolume = val => {
     appState.volume.set(val);
-    playerRef.current.getInternalPlayer().setVolume(val);
   };
 
   return (
     <AppBar position="fixed" className={classes.appBar} color="primary">
       <ToolBar>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
@@ -109,7 +93,7 @@ const Controller = ({ playerRef }) => {
           <Grid item xs>
             <Progress
               value={appState.progress.current}
-              onClick={handleProgressClick}
+              onChange={handleProgressClick}
             />
           </Grid>
           <Grid item>

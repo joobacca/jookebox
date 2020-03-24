@@ -35,7 +35,9 @@ const defaultProps = {
 const YoutubePlayer = ({ referenz }) => {
   const {
     video: { current },
-    progress: { set }
+    playBackState,
+    volume,
+    progress: { set },
   } = useAppState();
 
   const classes = useStyles();
@@ -49,7 +51,15 @@ const YoutubePlayer = ({ referenz }) => {
           secure="true"
           className={classes.player}
           {...defaultProps}
-          onProgress={e => set(Math.floor(e.played * 100) / 100)}
+          playing={playBackState.current}
+          volume={volume.current}
+          onProgress={e => {
+            console.log('event:' + e)
+            console.log('*100: ' + e.played * 100)
+            console.log('floored: ' + Math.floor(e.played * 100));
+            // console.log(Math.floor(e.played * 100));
+            // set(Math.floor(e.played * 100) / 100);
+          }}
         />
       </div>
       <Typography variant="h2">
