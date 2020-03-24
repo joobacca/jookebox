@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import ToolBar from '@material-ui/core/ToolBar';
+import ToolBar from '@material-ui/core/Toolbar';
 import { IconButton, Typography, Grid, Slider } from '@material-ui/core';
 import { SocketContext } from '../contexts/SocketProvider';
 import { useAppState } from '../contexts/AppStateProvider';
