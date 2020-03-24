@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
+import Container from '@material-ui/core/Container';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { UserNameContext } from "./contexts/UserNameProvider";
@@ -12,9 +13,12 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: "25ch"
     }
+  },
+  container: {
+
   }
 }));
-
+ 
 const Login = () => {
   const [, set] = useContext(UserNameContext);
   const [usernameVal, setName] = useState('');
@@ -28,7 +32,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <Container>
       <form
         noValidate
         autoComplete="off"
@@ -44,7 +48,7 @@ const Login = () => {
           Enter
         </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

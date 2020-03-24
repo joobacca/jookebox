@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
     boxSizing: 'border-box',
+    maxHeight: '100vh',
+    overflow: 'hidden',
   },
   form: {
     width: '100%',
@@ -23,6 +25,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    overflowY: 'auto',
   },
 }));
 
@@ -47,13 +50,6 @@ const Search = () => {
   useEffect(() => {
     socket.on('searchResults', searchRes);
   }, [socket]);
-
-  const renderList = () => {
-    if (result === null) {
-      return <Spinner />;
-    }
-    return <SearchResultList data={result} />;
-  };
 
   return (
     <Grid container spacing={2} className={classes.root}>

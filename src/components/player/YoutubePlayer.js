@@ -52,11 +52,12 @@ const YoutubePlayer = ({ referenz }) => {
           className={classes.player}
           {...defaultProps}
           playing={playBackState.current}
-          volume={volume.current}
+          volume={volume.current / 100}
+          // progressInterval={100}
           onProgress={e => {
-            console.log('event:' + e)
-            console.log('*100: ' + e.played * 100)
-            console.log('floored: ' + Math.floor(e.played * 100));
+            console.log(e)
+            console.log('*100: ' + e.playedSeconds * 100)
+            console.log(Math.floor(e.played * 100) / 100);
             // console.log(Math.floor(e.played * 100));
             // set(Math.floor(e.played * 100) / 100);
           }}

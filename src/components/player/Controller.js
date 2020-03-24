@@ -57,15 +57,20 @@ const Controller = ({ playerRef }) => {
 
   const nextVideo = () => socket.emit('playNext');
 
-  const handleVolumeClick = (event, newValue) => setVolume(newValue);
+  const handleVolumeClick = (event, newValue) => {
+    setVolume(newValue);
+  };
 
   const getSeconds = percent =>
     playerRef.current.getInternalPlayer().getDuration() * (percent / 100);
 
-  const handleProgressClick = (event, newValue) =>
+  const handleProgressClick = throttle((event, newValue) => {
     socket.emit('setProgress', newValue);
+  }, 200);
 
   const setVolume = val => {
+    // React-Player accepts values between 1 and 0, while
+    // the Mui-Slider gives values between 100 and 0
     appState.volume.set(val);
   };
 
