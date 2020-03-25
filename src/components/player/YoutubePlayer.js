@@ -37,40 +37,30 @@ const YoutubePlayer = ({ referenz }) => {
     video: { current },
     playBackState,
     volume,
-    progress: { set },
   } = useAppState();
 
   const classes = useStyles();
   return (
-    <>
-      <div className={classes.wrapper}>
-        <ReactPlayer
-          url={`https://www.youtube.com/watch?v=${current.videoId}`}
-          ref={referenz}
-          samesite="none"
-          secure="true"
-          className={classes.player}
-          {...defaultProps}
-          playing={playBackState.current}
-          volume={volume.current / 100}
-          // progressInterval={100}
-          onProgress={e => {
-            console.log(e)
-            console.log('*100: ' + e.playedSeconds * 100)
-            console.log(Math.floor(e.played * 100) / 100);
-            // console.log(Math.floor(e.played * 100));
-            // set(Math.floor(e.played * 100) / 100);
-          }}
-        />
-      </div>
-      <Typography variant="h2">
-      {current.title}
-      </Typography>
-      <Typography>
-      {current.description}
-      </Typography>
-    {/* {current.author} */}
-    </>
+    current && (
+      <>
+        <div className={classes.wrapper}>
+          <ReactPlayer
+            url={`https://www.youtube.com/watch?v=${current.videoId}`}
+            ref={referenz}
+            samesite="none"
+            secure="true"
+            className={classes.player}
+            {...defaultProps}
+            playing={playBackState.current}
+            volume={volume.current / 100}
+            // progressInterval={100}
+          />
+        </div>
+        <Typography variant="h2">{current.title}</Typography>
+        <Typography>{current.description}</Typography>
+        {/* {current.author} */}
+      </>
+    )
   );
 };
 

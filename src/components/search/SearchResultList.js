@@ -32,7 +32,7 @@ const SearchResultList = ({ data }) => {
 
 const Item = ({ data }) => {
   const socket = React.useContext(SocketContext);
-  const { title, url, description, thumbnail, author, videoId } = data;
+  const { title, description, thumbnail, author, videoId, duration: { seconds } } = data;
 
   const classes = useStyles();
   return (
@@ -41,14 +41,14 @@ const Item = ({ data }) => {
         <Avatar alt="" src={thumbnail} />
       </ListItemAvatar>
       <ListItemText
-        className={classes}
+        className={classes.secondary}
         primary={title}
         secondary={description}
       />
       <div>
         <IconButton
           onClick={() =>
-            socket.emit('play', { title, videoId, description, author })
+            socket.emit('play', { title, videoId, description, author, duration: seconds })
           }
         >
           <PlayArrowRoundedIcon />
@@ -60,6 +60,7 @@ const Item = ({ data }) => {
               videoId,
               description,
               author,
+              duration: seconds,
             })
           }
         >

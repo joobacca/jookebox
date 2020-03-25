@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import { IconButton, Typography, Grid, Slider } from '@material-ui/core';
@@ -20,6 +20,17 @@ const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1,
   },
+  slider: {
+    '& .MuiSlider-thumb': {
+      transition: 'left 1s linear',
+    },
+    '& .MuiSlider-thumb.MuiSlider-active': {
+      transition: 'left 0s linear',
+    },
+    '& .MuiSlider-track': {
+      transition: 'width 1s linear',
+    },
+  },
 }));
 
 const Volume = withStyles({
@@ -38,31 +49,45 @@ const Progress = withStyles({
 
 const Controller = ({ playerRef }) => {
   const socket = useContext(SocketContext);
-  const {
-    video,
-    progress,
-    playBackState,
-    volume,
-  } = useAppState();
+  const { video, playedAt, playBackState, volume } = useAppState();
   const classes = useStyles();
 
-  socket.on('playVideo', video => {
-    video.set(video);
-  });
+  const [progress, setProgress] = useState(0);
 
-  socket.on('setProgress', value => {
-    progress.set(Math.floor(value * 100) / 100);
-    playerRef.current.getInternalPlayer().seekTo(getSeconds(value));
-  });
+  useEffect(() => {
+    socket.on('playVideo', newVideo => {
+      video.set(newVideo);
+      setProgress(0);
+      // playedAt.set(moment());
+      playBackState.set(true);
+    });
 
-  socket.on('toggle', ({ state, time }) => {
-    playBackState.set(state);
+    socket.on('setProgress', value => {
+      setProgress(value);
+      playerRef.current.seekTo(value);
+      // progress.set(Math.floor(value * 100) / 100);
+    });
+
+    socket.on('toggle', ({ state }) => {
+      playBackState.set(state);
+    });
+  }, [socket, video, playedAt, playBackState, volume, playerRef]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (
+        playBackState.current &&
+        playerRef.current.getInternalPlayer().getPlayerState() === 1
+      ) {
+        setProgress(progress + 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
   });
 
   const togglePlayback = () => {
     socket.emit('toggle', {
       state: playBackState.current,
-      time: playerRef.current.getInternalPlayer().getCurrentTime(),
     });
   };
 
@@ -108,7 +133,13 @@ const Controller = ({ playerRef }) => {
           </Grid>
           <Grid item xs>
             <Progress
-              value={progress.current}
+              className={classes.slider}
+              min={0}
+              max={video.duration}
+              value={progress}
+              // value={() =>
+              //   Math.floor(((moment() - playedAt.current) / 1000) % 60)
+              // }
               onChange={handleProgressClick}
             />
           </Grid>

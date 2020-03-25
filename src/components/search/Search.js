@@ -43,7 +43,6 @@ const Search = () => {
   };
 
   const searchRes = data => {
-    console.log(data);
     setResult(data);
   };
 

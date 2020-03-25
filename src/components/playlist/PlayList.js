@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppState } from '../contexts/AppStateProvider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,18 +17,16 @@ import { makeStyles } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
-  }
+  },
 }));
 
 const PlayList = () => {
   const { playList } = useAppState();
   const socket = useSocket();
   const classes = useStyles();
-  socket.on('synchronizePlayList', newPL => {
-    console.log(newPL);
-    playList.set(newPL);
-  });
-  console.log(playList.current);
+  useEffect(() => {
+    socket.on('synchronizePlayList', newPL => playList.set(newPL));
+  }, [socket, playList]);
   return (
     <div className={classes.root}>
       <Typography variant="h4">Playlist (aka Queue)</Typography>
@@ -37,7 +35,7 @@ const PlayList = () => {
       ) : (
         <List>
           {playList.current.map((el, i) => (
-            <ListItem>
+            <ListItem key={el.videoId}>
               <ListItemAvatar>
                 <Avatar>
                   <FolderIcon />
