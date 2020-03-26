@@ -6,7 +6,7 @@ export const SocketContext = React.createContext();
 
 const SocketProv = React.memo(({ children }) => {
   const socket = io('https://server.jookebox.kim:8081');
-  // const socket = io('http://134.122.87.165:8081');
+  // const socket = io('http://localhost:8081');
   const location = useLocation();
   socket.on('connect', () => {
     socket.emit('joinRoom', location.pathname);
