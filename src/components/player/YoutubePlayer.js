@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
     height: '100% !important',
     top: 0,
     left: 0,
+    pointerEvents: 'none',
   },
 }));
 
