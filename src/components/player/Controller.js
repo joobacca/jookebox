@@ -67,7 +67,7 @@ const Controller = ({ playerRef }) => {
 
   useEffect(() => {
     socket.on('playVideo', newVideo => {
-      video.set(newVideo);
+      video.set(newVideo || {});
       progress.set(0);
       playBackState.set(true);
     });
