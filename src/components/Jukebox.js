@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import SocketProvider from './contexts/SocketProvider';
-import { useUserName } from './contexts/UserNameProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
 import Controller from './player/Controller';
@@ -9,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import PlayList from './playlist/PlayList';
 
 const Jukebox = () => {
-  const [username] = useUserName();
   const playerRef = useRef();
   return (
     <SocketProvider>
