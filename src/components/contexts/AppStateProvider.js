@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 const AppStateContext = React.createContext();
 
 const AppStateProvider = ({ children }) => {
-  const [playing, setPlaying] = useState({ videoId: 'e1szcpyzsAE' });
+  const [playing, setPlaying] = useState({});
   const [playState, setPlayState] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(50);
