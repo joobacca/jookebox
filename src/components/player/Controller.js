@@ -31,6 +31,9 @@ const useStyles = makeStyles(theme => ({
       transition: 'width 1s linear',
     },
   },
+  alignCenter: {
+    alignItems: 'center',
+  },
 }));
 
 const Volume = withStyles({
@@ -49,41 +52,39 @@ const Progress = withStyles({
 
 const Controller = ({ playerRef }) => {
   const socket = useContext(SocketContext);
-  const { video, playedAt, playBackState, volume } = useAppState();
+  const { video, playBackState, volume, progress } = useAppState();
   const classes = useStyles();
-
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     socket.on('playVideo', newVideo => {
       video.set(newVideo);
-      setProgress(0);
-      // playedAt.set(moment());
+      progress.set(0);
       playBackState.set(true);
     });
 
     socket.on('setProgress', value => {
-      setProgress(value);
+      progress.set(value);
       playerRef.current.seekTo(value);
-      // progress.set(Math.floor(value * 100) / 100);
     });
 
     socket.on('toggle', ({ state }) => {
       playBackState.set(state);
     });
-  }, [socket, video, playedAt, playBackState, volume, playerRef]);
+  }, [socket, video, progress, playBackState, volume, playerRef]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (
-        playBackState.current &&
-        playerRef.current.getInternalPlayer().getPlayerState() === 1
-      ) {
-        setProgress(progress + 1);
+      if (playerRef.current.getInternalPlayer().getPlayerState) {
+        if (
+          playBackState.current &&
+          playerRef.current.getInternalPlayer().getPlayerState() === 1
+        ) {
+          progress.set(progress.current + 1);
+        }
       }
     }, 1000);
     return () => clearInterval(interval);
-  });
+  }, [playerRef, playBackState, progress]);
 
   const togglePlayback = () => {
     socket.emit('toggle', {
@@ -101,8 +102,9 @@ const Controller = ({ playerRef }) => {
     playerRef.current.getInternalPlayer().getDuration() * (percent / 100);
 
   const handleProgressClick = throttle((event, newValue) => {
+    console.log(newValue, video.current.duration, playerRef.current.getInternalPlayer().getDuration());
     socket.emit('setProgress', newValue);
-  }, 200);
+  }, 500);
 
   const setVolume = val => {
     // React-Player accepts values between 1 and 0, while
@@ -113,7 +115,7 @@ const Controller = ({ playerRef }) => {
   return (
     <AppBar position="fixed" className={classes.appBar} color="primary">
       <ToolBar>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} className={classes.alignCenter}>
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
@@ -135,11 +137,8 @@ const Controller = ({ playerRef }) => {
             <Progress
               className={classes.slider}
               min={0}
-              max={video.duration}
-              value={progress}
-              // value={() =>
-              //   Math.floor(((moment() - playedAt.current) / 1000) % 60)
-              // }
+              max={video.current.duration}
+              value={progress.current}
               onChange={handleProgressClick}
             />
           </Grid>
