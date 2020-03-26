@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
-import { IconButton, Typography, Grid, Slider } from '@material-ui/core';
+import {
+  IconButton,
+  Typography,
+  Grid,
+  Slider,
+  Tooltip,
+} from '@material-ui/core';
 import { SocketContext } from '../contexts/SocketProvider';
 import { useAppState } from '../contexts/AppStateProvider';
 import { withStyles, makeStyles } from '@material-ui/styles';
@@ -32,7 +38,11 @@ const useStyles = makeStyles(theme => ({
     },
   },
   alignCenter: {
+    display: 'flex',
     alignItems: 'center',
+  },
+  iconColor: {
+    color: '#fff',
   },
 }));
 
@@ -60,6 +70,12 @@ const Controller = ({ playerRef }) => {
       video.set(newVideo);
       progress.set(0);
       playBackState.set(true);
+    });
+
+    socket.on('emptyPlayback', () => {
+      video.set({});
+      progress.set(0);
+      playBackState.set(false);
     });
 
     socket.on('setProgress', value => {
@@ -102,7 +118,6 @@ const Controller = ({ playerRef }) => {
     playerRef.current.getInternalPlayer().getDuration() * (percent / 100);
 
   const handleProgressClick = throttle((event, newValue) => {
-    console.log(newValue, video.current.duration, playerRef.current.getInternalPlayer().getDuration());
     socket.emit('setProgress', newValue);
   }, 500);
 
@@ -119,9 +134,14 @@ const Controller = ({ playerRef }) => {
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <VolumeDown onClick={() => setVolume(0)} />
+                <IconButton
+                  onClick={() => setVolume(0)}
+                  className={classes.iconColor}
+                >
+                  <VolumeDown />
+                </IconButton>
               </Grid>
-              <Grid item xs>
+              <Grid item xs className={classes.alignCenter}>
                 <Volume
                   value={volume.current}
                   onChange={handleVolumeClick}
@@ -129,7 +149,12 @@ const Controller = ({ playerRef }) => {
                 />
               </Grid>
               <Grid item>
-                <VolumeUp onClick={() => setVolume(100)} />
+                <IconButton
+                  onClick={() => setVolume(100)}
+                  className={classes.iconColor}
+                >
+                  <VolumeUp />
+                </IconButton>
               </Grid>
             </Grid>
           </Grid>
@@ -137,21 +162,17 @@ const Controller = ({ playerRef }) => {
             <Progress
               className={classes.slider}
               min={0}
-              max={video.current.duration}
+              max={video.current.duration || 100}
               value={progress.current}
               onChange={handleProgressClick}
             />
           </Grid>
           <Grid item>
-            <IconButton onClick={togglePlayback}>
-              <Typography color="textSecondary">
-                {playBackState.current ? <Pause /> : <Play />}
-              </Typography>
+            <IconButton onClick={togglePlayback} className={classes.iconColor}>
+              {playBackState.current ? <Pause /> : <Play />}
             </IconButton>
-            <IconButton onClick={nextVideo}>
-              <Typography color="textSecondary">
-                <FastForward />
-              </Typography>
+            <IconButton onClick={nextVideo} className={classes.iconColor}>
+              <FastForward />
             </IconButton>
           </Grid>
         </Grid>
