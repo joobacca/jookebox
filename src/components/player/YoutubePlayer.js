@@ -39,22 +39,23 @@ const YoutubePlayer = ({ referenz }) => {
     playBackState,
     volume,
   } = useAppState();
-
+  console.log(playBackState.current);
   const classes = useStyles();
   return (
     current && (
       <>
         <div className={classes.wrapper}>
           <ReactPlayer
+            {...defaultProps}
             url={`https://www.youtube.com/watch?v=${current.videoId}`}
             ref={referenz}
             samesite="none"
             secure="true"
             className={classes.player}
-            {...defaultProps}
             playing={playBackState.current}
             volume={volume.current / 100}
-            // progressInterval={100}
+            // onEnded={() => playBackState.set(false)}
+            
           />
         </div>
         <Typography variant="h2">{current.title}</Typography>
