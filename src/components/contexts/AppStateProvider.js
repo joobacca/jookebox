@@ -8,14 +8,15 @@ const AppStateProvider = ({ children }) => {
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(50);
   const [playList, setPlayList] = useState([]);
+
   return (
     <AppStateContext.Provider
       value={{
         video: { current: playing, set: setPlaying },
-        playBackState: { current: playState, set: setPlayState },
         volume: { current: volume, set: setVolume },
         progress: { current: progress, set: setProgress },
         playList: { current: playList, set: setPlayList },
+        playBackState: { current: playState, set: setPlayState },
       }}
     >
       {children}
