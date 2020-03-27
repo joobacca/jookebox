@@ -70,6 +70,7 @@ const Controller = ({ playerRef }) => {
       video.set(newVideo || {});
       progress.set(0);
       playBackState.set(true);
+      // console.log(video, playBackState)
     });
 
     socket.on('emptyPlayback', () => {
@@ -83,7 +84,7 @@ const Controller = ({ playerRef }) => {
       playerRef.current.seekTo(value);
     });
 
-    socket.on('toggle', ({ state }) => {
+    socket.on('toggle', state => {
       playBackState.set(state);
     });
   }, [socket, video, progress, playBackState, volume, playerRef]);
@@ -95,7 +96,7 @@ const Controller = ({ playerRef }) => {
           playBackState.current &&
           playerRef.current.getInternalPlayer().getPlayerState() === 1
         ) {
-          progress.set(progress.current + 1);
+          progress.set(playerRef.current.getInternalPlayer().getCurrentTime());
         }
       }
     }, 1000);
@@ -113,9 +114,6 @@ const Controller = ({ playerRef }) => {
   const handleVolumeClick = (event, newValue) => {
     setVolume(newValue);
   };
-
-  const getSeconds = percent =>
-    playerRef.current.getInternalPlayer().getDuration() * (percent / 100);
 
   const handleProgressClick = throttle((event, newValue) => {
     socket.emit('setProgress', newValue);
