@@ -5,14 +5,16 @@ import { SocketContext } from '../contexts/SocketProvider';
 import Button from '@material-ui/core/Button';
 import SearchResultList from './SearchResultList';
 import Spinner from '@material-ui/core/CircularProgress';
-import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import {
+  ThemeProvider,
+  makeStyles,
+  createMuiTheme,
+} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(2),
     boxSizing: 'border-box',
-    maxHeight: '100vh',
-    overflow: 'hidden',
   },
   form: {
     width: '100%',
@@ -21,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   wrapper: {
-    minHeight: '300px',
+    height: '100vh',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -62,7 +64,7 @@ const Search = () => {
             />
           </Grid>
           <Grid item>
-            <Button type="submit">Suche</Button>
+            <Button type="submit">Search</Button>
           </Grid>
         </Grid>
       </form>
