@@ -7,7 +7,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
-import Typography from '@material-ui/core/Typography';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { SocketContext } from '../contexts/SocketProvider';
 
