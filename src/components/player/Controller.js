@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
-import {
-  IconButton,
-  Typography,
-  Grid,
-  Slider,
-  Tooltip,
-} from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Slider from '@material-ui/core/Slider';
 import { SocketContext } from '../contexts/SocketProvider';
 import { useAppState } from '../contexts/AppStateProvider';
 import { withStyles, makeStyles } from '@material-ui/styles';

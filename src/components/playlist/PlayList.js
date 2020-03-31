@@ -29,7 +29,7 @@ const PlayList = () => {
   }, [socket, playList]);
   return (
     <div className={classes.root}>
-      <Typography variant="h4">Playlist (aka Queue)</Typography>
+      <Typography variant="h5" component="h2">Playlist (aka Queue)</Typography>
       {playList.current.length === 0 ? (
         <Typography>Empty...</Typography>
       ) : (
