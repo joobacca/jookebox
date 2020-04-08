@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextInput from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { SocketContext } from '../contexts/SocketProvider';
 import Button from '@material-ui/core/Button';
-import SearchResultList from './SearchResultList';
 import Spinner from '@material-ui/core/CircularProgress';
 import {
   ThemeProvider,
@@ -11,7 +9,11 @@ import {
   createMuiTheme,
 } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+import SearchResultList from './SearchResultList';
+import { useSocket } from '../contexts/SocketProvider';
+import { useAppState } from '../contexts/AppStateProvider';
+
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     boxSizing: 'border-box',
@@ -23,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   wrapper: {
-    height: '100vh',
+    height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -31,26 +33,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Search = () => {
-  const socket = useContext(SocketContext);
+const Search = React.memo(() => {
+  const socket = useSocket();
+  const {
+    search: { current, set },
+  } = useAppState();
   const [val, setVal] = useState('Waschbär');
-  const [result, setResult] = useState([]);
 
   const classes = useStyles();
 
-  const search = e => {
+  const search = (e) => {
     e.preventDefault();
     socket.emit('search', val);
-    setResult(null);
-  };
-
-  const searchRes = data => {
-    setResult(data);
+    set(null);
   };
 
   useEffect(() => {
-    socket.on('searchResults', searchRes);
-  }, [socket]);
+    socket.on('searchResults', set);
+    return () => socket.off('searchResults', set);
+  }, [socket, set]);
 
   return (
     <Grid container spacing={2} className={classes.root}>
@@ -58,7 +59,7 @@ const Search = () => {
         <Grid container spacing={2}>
           <Grid item xs>
             <TextInput
-              onChange={e => setVal(e.target.value)}
+              onChange={(e) => setVal(e.target.value)}
               value={val}
               style={{ width: '100%' }}
             />
@@ -68,17 +69,17 @@ const Search = () => {
           </Grid>
         </Grid>
       </form>
-      <Grid item xs={12}>
-        <ThemeProvider
-          theme={createMuiTheme({ palette: { text: { secondary: 'black' } } })}
-        >
-          <div className={classes.wrapper}>
-            {result === null ? <Spinner /> : <SearchResultList data={result} />}
-          </div>
-        </ThemeProvider>
-      </Grid>
+      <ThemeProvider
+        theme={createMuiTheme({
+          palette: { text: { secondary: 'black' } },
+        })}
+      >
+        <div className={classes.wrapper}>
+          {current === null ? <Spinner /> : <SearchResultList data={current} />}
+        </div>
+      </ThemeProvider>
     </Grid>
   );
-};
+});
 
 export default Search;

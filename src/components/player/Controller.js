@@ -1,11 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
-import { SocketContext } from '../contexts/SocketProvider';
-import { useAppState } from '../contexts/AppStateProvider';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import Pause from '@material-ui/icons/PauseCircleFilledRounded';
 import Play from '@material-ui/icons/PlayCircleFilledRounded';
@@ -13,8 +11,10 @@ import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import FastForward from '@material-ui/icons/FastForwardRounded';
 import throttle from 'lodash/throttle';
+import { useSocket } from '../contexts/SocketProvider';
+import { useAppState } from '../contexts/AppStateProvider';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
@@ -57,47 +57,48 @@ const Progress = withStyles({
 })(Slider);
 
 const Controller = ({ playerRef }) => {
-  const socket = useContext(SocketContext);
+  const socket = useSocket();
   const { video, playBackState, volume, progress } = useAppState();
   const classes = useStyles();
 
   useEffect(() => {
-    socket.on('playVideo', newVideo => {
+    const playVideo = (newVideo) => {
       video.set(newVideo || {});
       progress.set(0);
       playBackState.set(true);
-      // console.log(video, playBackState)
-    });
+    };
+    socket.on('playVideo', playVideo);
 
-    socket.on('emptyPlayback', () => {
+    const emptyPlayback = () => {
       video.set({});
       progress.set(0);
       playBackState.set(false);
-    });
+    };
+    socket.on('emptyPlayback', emptyPlayback);
 
-    socket.on('setProgress', value => {
+    const setTimeCallback = (value) => {
+      let difference = value - progress.current;
       progress.set(value);
-      playerRef.current.seekTo(value);
-    });
-
-    socket.on('toggle', state => {
-      playBackState.set(state);
-    });
-  }, [socket, video, progress, playBackState, volume, playerRef]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (playerRef.current.getInternalPlayer().getPlayerState) {
-        if (
-          playBackState.current &&
-          playerRef.current.getInternalPlayer().getPlayerState() === 1
-        ) {
-          progress.set(playerRef.current.getInternalPlayer().getCurrentTime());
-        }
+      console.log(value, progress.current);
+      if (difference > 5 || difference < -5) {
+        
+        playerRef.current.seekTo(value);
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [playerRef, playBackState, progress]);
+    };
+    socket.on('setTime', setTimeCallback);
+
+    const toggleState = (state) => {
+      playBackState.set(state);
+    };
+    socket.on('toggle', toggleState);
+
+    return () => {
+      socket.off('setTime', setTimeCallback);
+      socket.off('toggle', toggleState);
+      socket.off('emptyPlayback', emptyPlayback);
+      socket.off('playVideo', playVideo);
+    };
+  }, [socket, video, progress, playBackState, volume, playerRef]);
 
   const togglePlayback = () => {
     socket.emit('toggle', {
@@ -115,9 +116,7 @@ const Controller = ({ playerRef }) => {
     socket.emit('setProgress', newValue);
   }, 500);
 
-  const setVolume = val => {
-    // React-Player accepts values between 1 and 0, while
-    // the Mui-Slider gives values between 100 and 0
+  const setVolume = (val) => {
     volume.set(val);
   };
 
@@ -125,8 +124,7 @@ const Controller = ({ playerRef }) => {
     <AppBar position="fixed" className={classes.appBar} color="primary">
       <ToolBar>
         <Grid container spacing={2} className={classes.alignCenter}>
-          <Grid item>
-            <Grid container spacing={2}>
+          <Grid item container md={3} spacing={2}>
               <Grid item>
                 <IconButton
                   onClick={() => setVolume(0)}
@@ -150,9 +148,8 @@ const Controller = ({ playerRef }) => {
                   <VolumeUp />
                 </IconButton>
               </Grid>
-            </Grid>
           </Grid>
-          <Grid item xs>
+          <Grid item xs md={6}>
             <Progress
               className={classes.slider}
               min={0}
@@ -161,7 +158,7 @@ const Controller = ({ playerRef }) => {
               onChange={handleProgressClick}
             />
           </Grid>
-          <Grid item>
+          <Grid item md={3}>
             <IconButton onClick={togglePlayback} className={classes.iconColor}>
               {playBackState.current ? <Pause /> : <Play />}
             </IconButton>

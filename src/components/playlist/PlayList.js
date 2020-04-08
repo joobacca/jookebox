@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
-import { useAppState } from '../contexts/AppStateProvider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useSocket } from '../contexts/SocketProvider';
-import { makeStyles } from '@material-ui/core';
+import { useAppState } from '../contexts/AppStateProvider';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
   },
@@ -24,23 +23,26 @@ const PlayList = () => {
   const { playList } = useAppState();
   const socket = useSocket();
   const classes = useStyles();
+
   useEffect(() => {
-    socket.on('synchronizePlayList', newPL => playList.set(newPL));
+    const setPlaylist = (newPL) => playList.set(newPL);
+    socket.on('synchronizePlayList', setPlaylist);
+    return () => {
+      socket.off('synchronizePlayList', setPlaylist);
+    };
   }, [socket, playList]);
+
   return (
     <div className={classes.root}>
-      <Typography variant="h5" component="h2">Playlist (aka Queue)</Typography>
+      <Typography variant="h5" component="h2">
+        Playlist (aka Queue)
+      </Typography>
       {playList.current.length === 0 ? (
         <Typography>Empty...</Typography>
       ) : (
         <List>
           {playList.current.map((el, i) => (
             <ListItem key={el.videoId}>
-              <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
-              </ListItemAvatar>
               <ListItemText primary={el.title} />
               <ListItemSecondaryAction>
                 <IconButton

@@ -1,16 +1,16 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
-import ProtectedRoute from './routes/UserNameRoute';
-import Jukebox from './components/Jukebox';
+import SocketProvider from './components/contexts/SocketProvider';
 import UserNameProvider from './components/contexts/UserNameProvider';
+import ProtectedRoute from './components/routes/UserNameRoute';
 import Login from './components/Login';
+import Jukebox from './components/Jukebox';
 import Welcome from './components/Welcome';
-import { ThemeProvider } from '@material-ui/core';
 import theme from './util/theme';
-import { makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh !important',
     overflow: 'hidden',
@@ -20,23 +20,27 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const classes = useStyles();
   return (
-    <ThemeProvider theme={theme}>
-      <UserNameProvider>
-        <div className={classes.root}>
-          <Switch>
-            <Route exact path="/">
-              <Welcome />
-            </Route>
-            <Route path="/username">
-              <Login />
-            </Route>
-            <ProtectedRoute path="/:roomname">
-              <Jukebox />
-            </ProtectedRoute>
-          </Switch>
-        </div>
-      </UserNameProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <UserNameProvider>
+          <SocketProvider>
+            <div className={classes.root}>
+              <Switch>
+                <Route exact path="/">
+                  <Welcome />
+                </Route>
+                <Route path="/username">
+                  <Login />
+                </Route>
+                <ProtectedRoute path="/:roomname">
+                  <Jukebox />
+                </ProtectedRoute>
+              </Switch>
+            </div>
+          </SocketProvider>
+        </UserNameProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

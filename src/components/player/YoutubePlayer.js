@@ -2,9 +2,15 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import { useAppState } from '../contexts/AppStateProvider';
 import makeStyles from '@material-ui/styles/makeStyles';
+import responsiveFontSizes from '@material-ui/core/styles/responsiveFontSizes';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
+
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: 'relative',
     paddingTop: '56.25%',
@@ -39,8 +45,8 @@ const YoutubePlayer = ({ referenz }) => {
     playBackState,
     volume,
   } = useAppState();
-  console.log(playBackState.current);
   const classes = useStyles();
+
   return (
     current && (
       <>
@@ -54,13 +60,12 @@ const YoutubePlayer = ({ referenz }) => {
             className={classes.player}
             playing={playBackState.current}
             volume={volume.current / 100}
-            // onEnded={() => playBackState.set(false)}
-            
           />
         </div>
-        <Typography variant="h2">{current.title}</Typography>
-        <Typography>{current.description}</Typography>
-        {/* {current.author} */}
+        <ThemeProvider theme={theme}>
+          <Typography variant="h2">{current.title}</Typography>
+          <Typography>{current.description}</Typography>
+        </ThemeProvider>
       </>
     )
   );

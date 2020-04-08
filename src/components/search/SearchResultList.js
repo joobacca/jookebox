@@ -1,13 +1,16 @@
 import React from 'react';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
-import { IconButton, makeStyles } from '@material-ui/core';
 import { SocketContext } from '../contexts/SocketProvider';
 
 const useStyles = makeStyles(theme => ({
@@ -31,14 +34,15 @@ const SearchResultList = ({ data }) => {
 
 const Item = ({ data }) => {
   const socket = React.useContext(SocketContext);
-  const { title, description, thumbnail, author, videoId, duration: { seconds } } = data;
-
   const classes = useStyles();
+  const theme = useTheme();
+  const { title, description, thumbnail, author, videoId, duration: { seconds } } = data;
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
   return (
     <ListItem alignItems="flex-start">
-      <ListItemAvatar>
-        <Avatar alt="" src={thumbnail} />
-      </ListItemAvatar>
+      {isDesktop && <ListItemAvatar>
+        <Avatar alt={title} src={thumbnail} />
+      </ListItemAvatar>}
       <ListItemText
         className={classes.secondary}
         primary={title}

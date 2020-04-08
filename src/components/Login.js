@@ -8,7 +8,7 @@ import { UserNameContext } from './contexts/UserNameProvider';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
@@ -18,10 +18,16 @@ const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     width: '100%',
-    height: '100%',
+    height: '100vh',
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'column',
   },
+  flexHorizontal: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+  }
 }));
 
 const Login = () => {
@@ -30,7 +36,7 @@ const Login = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const submit = e => {
+  const submit = (e) => {
     e.preventDefault();
     set(usernameVal);
     history.push(history.location.state.from.pathname);
@@ -41,18 +47,21 @@ const Login = () => {
       <form
         noValidate
         autoComplete="off"
-        classes={classes.root}
+        className={classes.container}
         onSubmit={submit}
       >
         <Typography>Gib einen Nutzernamen ein, um fortzufahren</Typography>
-        <TextField
-          value={usernameVal}
-          onChange={e => setName(e.target.value)}
-          label="Username"
-        />
-        <Button variant="contained" type="submit">
-          Enter
-        </Button>
+        <div className={classes.flexHorizontal}>
+          <TextField
+            value={usernameVal}
+            onChange={(e) => setName(e.target.value)}
+            label="Username"
+            color="secondary"
+          />
+          <Button variant="contained" type="submit">
+            Enter
+          </Button>
+        </div>
       </form>
     </Container>
   );
