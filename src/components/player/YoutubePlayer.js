@@ -53,7 +53,7 @@ const YoutubePlayer = ({ referenz }) => {
         <div className={classes.wrapper}>
           <ReactPlayer
             {...defaultProps}
-            url={`https://www.youtube.com/watch?v=${current.videoId}`}
+            url={`https://www.youtube.com/embed/${current.videoId}`}
             ref={referenz}
             samesite="none"
             secure="true"
