@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 64,
     height: '100%',
     '& > *': {
-      maxHeight: '100%',
+      height: '100%',
     },
   },
 }));
@@ -70,6 +70,7 @@ const Jukebox = () => {
     return () => {
       socket.off('connect', connectHandler);
       socket.off('synchronizeUserList', setUserList);
+      socket.close();
     };
   }, [socket, location.pathname, username]);
 
