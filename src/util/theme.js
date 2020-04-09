@@ -12,7 +12,7 @@ export default createMuiTheme({
     },
     text: {
       primary: '#000',
-      secondary: '#fff',
+      secondary: '#CE4257',
     },
   },
 });

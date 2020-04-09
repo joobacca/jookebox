@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useSocket } from '../contexts/SocketProvider';
 import { useAppState } from '../contexts/AppStateProvider';
@@ -42,7 +40,7 @@ const PlayList = () => {
       ) : (
         <List>
           {playList.current.map((el, i) => (
-            <ListItem key={el.videoId}>
+            <ListItem key={`${el.videoId}-${i}`}>
               <ListItemText primary={el.title} />
               <ListItemSecondaryAction>
                 <IconButton

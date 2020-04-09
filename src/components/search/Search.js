@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     boxSizing: 'border-box',
+    height: 'calc(100% + 16px)',
+    overflowY: 'auto',
   },
   form: {
     width: '100%',
@@ -25,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   wrapper: {
-    height: '100%',
+    width: '100%',
+    minHeight: '200px',
+    height: 'calc(100% - 50px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -38,7 +42,7 @@ const Search = React.memo(() => {
   const {
     search: { current, set },
   } = useAppState();
-  const [val, setVal] = useState('Waschbär');
+  const [val, setVal] = useState('Veil of Maya');
 
   const classes = useStyles();
 

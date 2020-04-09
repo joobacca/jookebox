@@ -13,15 +13,25 @@ import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import { SocketContext } from '../contexts/SocketProvider';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   secondary: {
     color: 'black',
   },
 }));
 
+const useListStyles = makeStyles((theme) => ({
+  wrapper: {
+    height: '100%',
+    boxSizing: 'border-box',
+  },
+}));
+
 const SearchResultList = ({ data }) => {
+  const classes = useListStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
-    <List>
+    <List className={classes.wrapper}>
       {data.map((el, i) => (
         <React.Fragment key={el.videoId}>
           {i !== 0 && <Divider variant="inset" component="li" />}
@@ -36,13 +46,22 @@ const Item = ({ data }) => {
   const socket = React.useContext(SocketContext);
   const classes = useStyles();
   const theme = useTheme();
-  const { title, description, thumbnail, author, videoId, duration: { seconds } } = data;
+  const {
+    title,
+    description,
+    thumbnail,
+    author,
+    videoId,
+    duration: { seconds },
+  } = data;
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
   return (
     <ListItem alignItems="flex-start">
-      {isDesktop && <ListItemAvatar>
-        <Avatar alt={title} src={thumbnail} />
-      </ListItemAvatar>}
+      {isDesktop && (
+        <ListItemAvatar>
+          <Avatar alt={title} src={thumbnail} />
+        </ListItemAvatar>
+      )}
       <ListItemText
         className={classes.secondary}
         primary={title}
@@ -51,7 +70,13 @@ const Item = ({ data }) => {
       <div>
         <IconButton
           onClick={() =>
-            socket.emit('play', { title, videoId, description, author, duration: seconds })
+            socket.emit('play', {
+              title,
+              videoId,
+              description,
+              author,
+              duration: seconds,
+            })
           }
         >
           <PlayArrowRoundedIcon />
