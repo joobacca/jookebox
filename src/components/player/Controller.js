@@ -76,15 +76,13 @@ const Controller = ({ playerRef }) => {
     };
     socket.on('emptyPlayback', emptyPlayback);
 
-    const setTimeCallback = (value) => {
+    const setTimeCallback = throttle((value) => {
       let difference = value - progress.current;
       progress.set(value);
-      console.log(value, progress.current);
       if (difference > 5 || difference < -5) {
-        
         playerRef.current.seekTo(value);
       }
-    };
+    }, 1000);
     socket.on('setTime', setTimeCallback);
 
     const toggleState = (state) => {
