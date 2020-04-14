@@ -50,7 +50,7 @@ const Login = () => {
         className={classes.container}
         onSubmit={submit}
       >
-        <Typography>Gib einen Nutzernamen ein, um fortzufahren</Typography>
+        <Typography>Enter a username</Typography>
         <div className={classes.flexHorizontal}>
           <TextField
             value={usernameVal}
