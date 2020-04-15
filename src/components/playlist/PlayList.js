@@ -54,7 +54,7 @@ const PlayList = () => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h5" component="h2">
+      <Typography variant="h5" component="h2" color="secondary">
         Playlist
       </Typography>
       <ThemeProvider theme={innerTheme}>

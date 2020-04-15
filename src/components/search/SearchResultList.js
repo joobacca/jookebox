@@ -17,19 +17,21 @@ const useStyles = makeStyles((theme) => ({
   secondary: {
     color: 'black',
   },
+  primary: {
+    color: '#CE4257',
+  },
 }));
 
 const useListStyles = makeStyles((theme) => ({
   wrapper: {
     height: '100%',
+    maxHeight: 'calc(100vh - 56px)',
     boxSizing: 'border-box',
   },
 }));
 
 const SearchResultList = ({ data }) => {
   const classes = useListStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <List className={classes.wrapper}>
       {data.map((el, i) => (
@@ -63,7 +65,8 @@ const Item = ({ data }) => {
         </ListItemAvatar>
       )}
       <ListItemText
-        className={classes.secondary}
+        className={{ ...classes.secondary }}
+        classes={{ primary: classes.primary }}
         primary={title}
         secondary={description}
       />

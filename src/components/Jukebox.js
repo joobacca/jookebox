@@ -6,6 +6,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
 import { useSocket } from './contexts/SocketProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     paddingBottom: 64,
     height: '100%',
-  }
+  },
 }));
 
 function TabPanel(props) {
@@ -69,7 +70,7 @@ const Jukebox = () => {
       socket.close();
     };
   }, [socket, location.pathname, username]);
-
+  console.log(classes.rootMobile);
   return (
     <AppStateProvider>
       <Grid container className={classes.root}>
@@ -88,29 +89,37 @@ const Jukebox = () => {
           </>
         )}
         {!desktop && (
-          <div className={classes.rootMobile}>
-            <YoutubePlayer referenz={playerRef} />
-            <AppBar position="static">
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="simple tabs example"
-              >
-                <Tab label="Search" />
-                <Tab label="Playlist" />
-                <Tab label="Userlist" />
-              </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-              <Search />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <PlayList />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <UserList />
-            </TabPanel>
-          </div>
+          <Box
+            className={classes.rootMobile}
+            display="flex"
+            flexDirection="column"
+          >
+            <Box flexGrow={0}>
+              <YoutubePlayer referenz={playerRef} />
+            </Box>
+            <Box flexGrow={1} style={{ height: '50vh'}}>
+              <AppBar position="static">
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="simple tabs example"
+                >
+                  <Tab label="Search" />
+                  <Tab label="Playlist" />
+                  <Tab label="Userlist" />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={value} index={0}>
+                <Search />
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <PlayList />
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <UserList />
+              </TabPanel>
+            </Box>
+          </Box>
         )}
       </Grid>
       <Controller playerRef={playerRef} />

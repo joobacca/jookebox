@@ -69,7 +69,7 @@ const Search = React.memo(() => {
             />
           </Grid>
           <Grid item>
-            <Button type="submit">Search</Button>
+            <Button type="submit" color="secondary">Search</Button>
           </Grid>
         </Grid>
       </form>
