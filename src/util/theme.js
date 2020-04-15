@@ -15,4 +15,7 @@ export default createMuiTheme({
       secondary: '#CE4257',
     },
   },
+  typography: {
+    fontSize: 12,
+  },
 });

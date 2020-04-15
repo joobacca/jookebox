@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     pointerEvents: 'none',
   },
+  head: {
+    fontSize: 22,
+  },
 }));
 
 const defaultProps = {
@@ -63,7 +66,9 @@ const YoutubePlayer = ({ referenz }) => {
           />
         </div>
         <ThemeProvider theme={theme}>
-          <Typography variant="h2">{current.title}</Typography>
+          <Typography variant="h2" component="h1" className={classes.head}>
+            {current.title}
+          </Typography>
           <Typography>{current.description}</Typography>
         </ThemeProvider>
       </>

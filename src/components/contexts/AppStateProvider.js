@@ -5,9 +5,9 @@ const AppStateContext = React.createContext();
 const AppStateProvider = ({ children }) => {
   const [playing, setPlaying] = useState({});
   const [playState, setPlayState] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(50);
   const [playList, setPlayList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
 
   return (
@@ -15,10 +15,10 @@ const AppStateProvider = ({ children }) => {
       value={{
         video: { current: playing, set: setPlaying },
         volume: { current: volume, set: setVolume },
-        progress: { current: progress, set: setProgress },
         playList: { current: playList, set: setPlayList },
-        playBackState: { current: playState, set: setPlayState },
+        userList: { current: userList, set: setUserList },
         search: { current: searchResult, set: setSearchResult },
+        playBackState: { current: playState, set: setPlayState },
       }}
     >
       {children}
