@@ -7,8 +7,7 @@ import Slider from '@material-ui/core/Slider';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import Pause from '@material-ui/icons/PauseCircleFilledRounded';
 import Play from '@material-ui/icons/PlayCircleFilledRounded';
-import VolumeDown from '@material-ui/icons/VolumeDown';
-import VolumeUp from '@material-ui/icons/VolumeUp';
+import Volume from './Volume';
 import FastForward from '@material-ui/icons/FastForwardRounded';
 import throttle from 'lodash/throttle';
 import { useSocket } from '../contexts/SocketProvider';
@@ -40,14 +39,11 @@ const useStyles = makeStyles((theme) => ({
   iconColor: {
     color: '#fff',
   },
+  flex: {
+    display: 'flex',
+  },
 }));
 
-const Volume = withStyles({
-  root: {
-    color: '#fff',
-    width: '300px',
-  },
-})(Slider);
 
 const Progress = withStyles({
   root: {
@@ -58,45 +54,52 @@ const Progress = withStyles({
 
 const Controller = ({ playerRef }) => {
   const socket = useSocket();
-  const { video, playBackState, volume, progress } = useAppState();
+  const { video, playBackState } = useAppState();
   const classes = useStyles();
-
+  const [progress, setProgress] = React.useState(0);
   useEffect(() => {
     const playVideo = (newVideo) => {
       video.set(newVideo || {});
-      progress.set(0);
+      setProgress(0);
       playBackState.set(true);
     };
     socket.on('playVideo', playVideo);
 
     const emptyPlayback = () => {
       video.set({});
-      progress.set(0);
+      setProgress(0);
       playBackState.set(false);
     };
     socket.on('emptyPlayback', emptyPlayback);
 
-    const setTimeCallback = throttle((value) => {
-      let difference = value - progress.current;
-      progress.set(value);
+    const synchronizeProgress = throttle((value) => {
+      let difference = value - progress;
+      setProgress(value);
       if (difference > 5 || difference < -5) {
         playerRef.current.seekTo(value);
       }
     }, 1000);
-    socket.on('setTime', setTimeCallback);
+    socket.on('synchronizeProgress', synchronizeProgress);
 
     const toggleState = (state) => {
       playBackState.set(state);
     };
     socket.on('toggle', toggleState);
 
+    const setTimeCallback = (value) => {
+      setProgress(value);
+      playerRef.current.seekTo(value);
+    };
+    socket.on('setTime', setTimeCallback);
+
     return () => {
+      socket.off('synchronizeProgress', synchronizeProgress);
       socket.off('setTime', setTimeCallback);
       socket.off('toggle', toggleState);
       socket.off('emptyPlayback', emptyPlayback);
       socket.off('playVideo', playVideo);
     };
-  }, [socket, video, progress, playBackState, volume, playerRef]);
+  }, [socket, video, progress, playBackState, playerRef]);
 
   const togglePlayback = () => {
     socket.emit('toggle', {
@@ -106,57 +109,23 @@ const Controller = ({ playerRef }) => {
 
   const nextVideo = () => socket.emit('playNext');
 
-  const handleVolumeClick = (event, newValue) => {
-    setVolume(newValue);
-  };
-
   const handleProgressClick = throttle((event, newValue) => {
     socket.emit('setProgress', newValue);
   }, 500);
-
-  const setVolume = (val) => {
-    volume.set(val);
-  };
 
   return (
     <AppBar position="fixed" className={classes.appBar} color="primary">
       <ToolBar>
         <Grid container spacing={2} className={classes.alignCenter}>
-          <Grid item container md={3} spacing={2}>
-              <Grid item>
-                <IconButton
-                  onClick={() => setVolume(0)}
-                  className={classes.iconColor}
-                >
-                  <VolumeDown />
-                </IconButton>
-              </Grid>
-              <Grid item xs className={classes.alignCenter}>
-                <Volume
-                  value={volume.current}
-                  onChange={handleVolumeClick}
-                  aria-labelledby="continuous-slider"
-                />
-              </Grid>
-              <Grid item>
-                <IconButton
-                  onClick={() => setVolume(100)}
-                  className={classes.iconColor}
-                >
-                  <VolumeUp />
-                </IconButton>
-              </Grid>
-          </Grid>
-          <Grid item xs md={6}>
+          <Volume />
+          <Grid item xs className={classes.alignCenter}>
             <Progress
               className={classes.slider}
               min={0}
               max={video.current.duration || 100}
-              value={progress.current}
+              value={progress}
               onChange={handleProgressClick}
             />
-          </Grid>
-          <Grid item md={3}>
             <IconButton onClick={togglePlayback} className={classes.iconColor}>
               {playBackState.current ? <Pause /> : <Play />}
             </IconButton>
