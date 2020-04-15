@@ -6,8 +6,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-
 import { useSocket } from './contexts/SocketProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
@@ -15,6 +13,7 @@ import Controller from './player/Controller';
 import AppStateProvider from './contexts/AppStateProvider';
 import PlayList from './playlist/PlayList';
 import { useUserName } from './contexts/UserNameProvider';
+import UserList from './userlist/UserList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,8 +50,6 @@ const Jukebox = () => {
   const username = useUserName();
   const socket = useSocket();
 
-  const [userList, setUserList] = React.useState([]);
-
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const [value, setValue] = React.useState(0);
@@ -62,14 +59,8 @@ const Jukebox = () => {
   };
 
   React.useEffect(() => {
-    const connectHandler = () => {
-      socket.emit('joinRoom', { room: location.pathname, id: username });
-    };
-    socket.on('connect', connectHandler);
-    socket.on('synchronizeUserList', setUserList);
+    socket.emit('joinRoom', { room: location.pathname, id: username });
     return () => {
-      socket.off('connect', connectHandler);
-      socket.off('synchronizeUserList', setUserList);
       socket.close();
     };
   }, [socket, location.pathname, username]);
@@ -87,6 +78,7 @@ const Jukebox = () => {
             </Grid>
             <Grid item sm={12} md={2} lg={2} xl={3}>
               <PlayList />
+              <UserList />
             </Grid>
           </>
         )}
@@ -101,7 +93,7 @@ const Jukebox = () => {
               >
                 <Tab label="Search" />
                 <Tab label="Playlist" />
-                <Tab label="Chat?" />
+                <Tab label="Userlist" />
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -111,16 +103,10 @@ const Jukebox = () => {
               <PlayList />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              hiahihi
+              <UserList />
             </TabPanel>
           </div>
         )}
-        {/* <Grid item sm>
-          {/* <button onClick={() => socket.emit('clearInterval')}
-          {userList.map((el) => (
-            <div>{el}</div>
-          ))}
-        </Grid> */}
       </Grid>
       <Controller playerRef={playerRef} />
     </AppStateProvider>
