@@ -4,7 +4,8 @@ import io from 'socket.io-client';
 export const SocketContext = React.createContext();
 
 const SocketProv = React.memo(({ children }) => {
-  const socket = io('https://server.jookebox.kim');
+  // const socket = io('https://server.jookebox.kim');
+  const socket = io('http://localhost:8081');
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
     },
   },
+  rootMobile: {
+    width: '100%',
+    paddingBottom: 64,
+    height: '100%',
+  }
 }));
 
 function TabPanel(props) {
@@ -83,7 +88,7 @@ const Jukebox = () => {
           </>
         )}
         {!desktop && (
-          <div className={classes.root}>
+          <div className={classes.rootMobile}>
             <YoutubePlayer referenz={playerRef} />
             <AppBar position="static">
               <Tabs

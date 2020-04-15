@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: 'relative',
     paddingTop: '56.25%',
+    height: 'unset !important',
   },
   player: {
     position: 'absolute',

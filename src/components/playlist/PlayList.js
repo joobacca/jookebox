@@ -55,7 +55,7 @@ const PlayList = () => {
   return (
     <div className={classes.root}>
       <Typography variant="h5" component="h2">
-        Playlist (aka Queue)
+        Playlist
       </Typography>
       <ThemeProvider theme={innerTheme}>
         <List className={classes.playlist}>
