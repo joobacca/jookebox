@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import SocketProvider from './components/contexts/SocketProvider';
 import UserNameProvider from './components/contexts/UserNameProvider';
@@ -22,6 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <UserNameProvider>
           <SocketProvider>
             <div className={classes.root}>
