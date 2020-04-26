@@ -58,7 +58,6 @@ const YoutubePlayer = ({ referenz }) => {
   } = useAppState();
   const classes = useStyles();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-  console.log(playBackState);
   return (
     current && (
       <>
