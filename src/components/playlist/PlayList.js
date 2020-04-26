@@ -45,6 +45,10 @@ const PlayList = () => {
   const classes = useStyles();
 
   useEffect(() => {
+    socket.emit('getPlayList');
+  }, [socket]);
+
+  useEffect(() => {
     const setPlaylist = (newPL) => playList.set(newPL);
     socket.on('synchronizePlayList', setPlaylist);
     return () => {

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { useUserName } from './contexts/UserNameProvider';
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
-  }
+  },
 }));
 
 const Login = () => {
@@ -50,18 +51,21 @@ const Login = () => {
         className={classes.container}
         onSubmit={submit}
       >
-        <Typography>Enter a username</Typography>
-        <div className={classes.flexHorizontal}>
+        <Typography variant="h6" component="p" color="primary">
+          Enter a username
+        </Typography>
+        <Box display="flex" justifyContent="flex-around">
           <TextField
             value={usernameVal}
             onChange={(e) => setName(e.target.value)}
             label="Username"
             color="secondary"
+            style={{ marginRight: 6 }}
           />
           <Button variant="contained" type="submit">
             Enter
           </Button>
-        </div>
+        </Box>
       </form>
     </Container>
   );

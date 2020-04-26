@@ -57,6 +57,14 @@ const Controller = ({ playerRef }) => {
   const { video, playBackState } = useAppState();
   const classes = useStyles();
   const [progress, setProgress] = React.useState(0);
+
+  console.log(socket);
+
+  // useEffect(() => {
+  //   socket.emit('synchronizeApp');
+  //   console.log('synchronizing app...');
+  // }, [socket]);
+  
   useEffect(() => {
     const playVideo = (newVideo) => {
       video.set(newVideo || {});

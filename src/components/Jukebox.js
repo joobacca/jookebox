@@ -70,7 +70,6 @@ const Jukebox = () => {
       socket.close();
     };
   }, [socket, location.pathname, username]);
-  console.log(classes.rootMobile);
   return (
     <AppStateProvider>
       <Grid container className={classes.root}>
@@ -97,7 +96,7 @@ const Jukebox = () => {
             <Box flexGrow={0}>
               <YoutubePlayer referenz={playerRef} />
             </Box>
-            <Box flexGrow={1} style={{ height: '50vh'}}>
+            <Box flexGrow={1}>
               <AppBar position="static">
                 <Tabs
                   value={value}

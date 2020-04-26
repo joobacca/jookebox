@@ -28,8 +28,13 @@ const UserList = () => {
   const classes = useStyles();
 
   useEffect(() => {
+    socket.emit('getUserList');
+  }, [socket]);
+
+  useEffect(() => {
     const setUserList = (newList) => userList.set(newList);
     socket.on('synchronizeUserList', setUserList);
+    
     return () => {
       socket.off('synchronizeUserList', setUserList);
     };

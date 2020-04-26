@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Jukebox from './components/Jukebox';
 import Welcome from './components/Welcome';
 import theme from './util/theme';
+import AppStateProvider from './components/contexts/AppStateProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,25 +21,28 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <UserNameProvider>
           <SocketProvider>
-            <div className={classes.root}>
-              <Switch>
-                <Route exact path="/">
-                  <Welcome />
-                </Route>
-                <Route path="/username">
-                  <Login />
-                </Route>
-                <ProtectedRoute path="/:roomname">
-                  <Jukebox />
-                </ProtectedRoute>
-              </Switch>
-            </div>
+            <AppStateProvider>
+              <div className={classes.root}>
+                <Switch>
+                  <Route exact path="/">
+                    <Welcome />
+                  </Route>
+                  <Route path="/username">
+                    <Login />
+                  </Route>
+                  <ProtectedRoute path="/:roomname">
+                    <Jukebox />
+                  </ProtectedRoute>
+                </Switch>
+              </div>
+            </AppStateProvider>
           </SocketProvider>
         </UserNameProvider>
       </ThemeProvider>
