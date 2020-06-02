@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSocket } from './contexts/SocketProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
@@ -72,56 +73,72 @@ const Jukebox = () => {
   }, [socket, location.pathname, username]);
   return (
     <AppStateProvider>
-      <Grid container className={classes.root}>
-        {desktop && (
-          <>
-            <Grid md={4} lg={4} xl={3}>
-              <Search />
-            </Grid>
-            <Grid item sm={12} md={6} lg={6} xl={6}>
-              <YoutubePlayer referenz={playerRef} />
-            </Grid>
-            <Grid item sm={12} md={2} lg={2} xl={3}>
-              <PlayList />
-              <UserList />
-            </Grid>
-          </>
-        )}
-        {!desktop && (
-          <Box
-            className={classes.rootMobile}
-            display="flex"
-            flexDirection="column"
-          >
-            <Box flexGrow={0}>
-              <YoutubePlayer referenz={playerRef} />
-            </Box>
-            <Box flexGrow={1}>
-              <AppBar position="static">
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="simple tabs example"
-                >
-                  <Tab label="Search" />
-                  <Tab label="Playlist" />
-                  <Tab label="Userlist" />
-                </Tabs>
-              </AppBar>
-              <TabPanel value={value} index={0}>
-                <Search />
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <PlayList />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <UserList />
-              </TabPanel>
-            </Box>
-          </Box>
-        )}
-      </Grid>
-      <Controller playerRef={playerRef} />
+      {socket.connected ? (
+        <>
+          <Grid container className={classes.root}>
+            {desktop && (
+              <>
+                <Grid md={4} lg={4} xl={3}>
+                  <Search />
+                </Grid>
+                <Grid item sm={12} md={6} lg={6} xl={6}>
+                  <YoutubePlayer referenz={playerRef} />
+                </Grid>
+                <Grid item sm={12} md={2} lg={2} xl={3}>
+                  <PlayList />
+                  <UserList />
+                </Grid>
+              </>
+            )}
+            {!desktop && (
+              <Box
+                className={classes.rootMobile}
+                display="flex"
+                flexDirection="column"
+              >
+                <Box flexGrow={0}>
+                  <YoutubePlayer referenz={playerRef} />
+                </Box>
+                <Box flexGrow={1}>
+                  <AppBar position="static">
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      aria-label="simple tabs example"
+                    >
+                      <Tab label="Search" />
+                      <Tab label="Playlist" />
+                      <Tab label="Userlist" />
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={value} index={0}>
+                    <Search />
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <PlayList />
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    <UserList />
+                  </TabPanel>
+                </Box>
+              </Box>
+            )}
+          </Grid>
+          <Controller playerRef={playerRef} />
+        </>
+      ) : (
+        <Box
+          width="100%"
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress style={{ marginBottom: 20}} />
+          Connecting...
+        </Box>
+      )}
     </AppStateProvider>
   );
 };
