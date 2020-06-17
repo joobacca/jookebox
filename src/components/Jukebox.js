@@ -67,10 +67,13 @@ const Jukebox = () => {
     setValue(newValue);
   };
 
+  const joinedRoom = () => setConnection(true);
+
   React.useEffect(() => {
-    socket.on('connect', () => setConnection(true));
+    socket.on('joinedRoom', joinedRoom);
     socket.emit('joinRoom', { room: location.pathname, id: username });
     return () => {
+      socket.off('joinedRoom', joinedRoom);
       socket.close();
     };
   }, [socket, location.pathname, username]);
