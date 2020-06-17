@@ -71,11 +71,6 @@ const YoutubePlayer = ({ referenz }) => {
             className={classes.player}
             playing={playBackState.current}
             volume={volume.current / 100}
-            onStart={() => {
-              if (!playBackState.current) {
-                referenz.current.getInternalPlayer().pauseVideo()
-              }
-            }}
           />
         </div>
         <ThemeProvider theme={theme}>

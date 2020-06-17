@@ -57,6 +57,8 @@ const Jukebox = () => {
   const username = useUserName();
   const socket = useSocket();
 
+  const [connection, setConnection] = React.useState(false);
+
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const [value, setValue] = React.useState(0);
@@ -66,6 +68,7 @@ const Jukebox = () => {
   };
 
   React.useEffect(() => {
+    socket.on('connect', () => setConnection(true));
     socket.emit('joinRoom', { room: location.pathname, id: username });
     return () => {
       socket.close();
@@ -73,7 +76,7 @@ const Jukebox = () => {
   }, [socket, location.pathname, username]);
   return (
     <AppStateProvider>
-      {socket.connected ? (
+      {connection ? (
         <>
           <Grid container className={classes.root}>
             {desktop && (
@@ -135,7 +138,7 @@ const Jukebox = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <CircularProgress style={{ marginBottom: 20}} />
+          <CircularProgress style={{ marginBottom: 20 }} />
           Connecting...
         </Box>
       )}
