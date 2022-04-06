@@ -1,0 +1,15 @@
+{
+  "main": "app.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.3",
+    "https": "^1.0.0",
+    "socket.io": "^4.4.1",
+    "yt-search": "^2.10.3"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
