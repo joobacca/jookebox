@@ -11,9 +11,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
-import { SocketContext } from '../contexts/SocketProvider';
+import { SocketContext } from '../../contexts/SocketProvider';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   secondary: {
     color: 'black',
   },
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const useListStyles = makeStyles((theme) => ({
+const useListStyles = makeStyles(() => ({
   wrapper: {
     height: '100%',
     maxHeight: 'calc(100vh - 56px)',

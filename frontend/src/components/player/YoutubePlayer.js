@@ -12,7 +12,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { useAppState } from '../contexts/AppStateProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);

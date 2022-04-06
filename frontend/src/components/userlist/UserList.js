@@ -5,8 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Divider from '@material-ui/core/Divider';
-import { useSocket } from '../contexts/SocketProvider';
-import { useAppState } from '../contexts/AppStateProvider';
+import { useSocket } from '../../contexts/SocketProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {

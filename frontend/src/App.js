@@ -3,16 +3,16 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import SocketProvider from './components/contexts/SocketProvider';
-import UserNameProvider from './components/contexts/UserNameProvider';
-import ProtectedRoute from './components/routes/UserNameRoute';
+import SocketProvider from './contexts/SocketProvider';
+import UserNameProvider from './contexts/UserNameProvider';
+import ProtectedRoute from './routes/UserNameRoute';
 import Login from './components/Login';
 import Jukebox from './components/Jukebox';
 import Welcome from './components/Welcome';
 import theme from './util/theme';
-import AppStateProvider from './components/contexts/AppStateProvider';
+import AppStateProvider from './contexts/AppStateProvider';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100vh !important',
     overflow: 'hidden',

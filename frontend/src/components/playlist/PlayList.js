@@ -11,8 +11,8 @@ import {
   createMuiTheme,
   ThemeProvider,
 } from '@material-ui/core/styles';
-import { useSocket } from '../contexts/SocketProvider';
-import { useAppState } from '../contexts/AppStateProvider';
+import { useSocket } from '../../contexts/SocketProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -10,10 +10,10 @@ import Play from '@material-ui/icons/PlayCircleFilledRounded';
 import Volume from './Volume';
 import FastForward from '@material-ui/icons/FastForwardRounded';
 import throttle from 'lodash/throttle';
-import { useSocket } from '../contexts/SocketProvider';
-import { useAppState } from '../contexts/AppStateProvider';
+import { useSocket } from '../../contexts/SocketProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     top: 'auto',
     bottom: 0,

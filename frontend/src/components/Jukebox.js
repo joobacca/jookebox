@@ -8,16 +8,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useSocket } from './contexts/SocketProvider';
+import { useSocket } from '../contexts/SocketProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
 import Controller from './player/Controller';
-import AppStateProvider from './contexts/AppStateProvider';
+import AppStateProvider from '../contexts/AppStateProvider';
 import PlayList from './playlist/PlayList';
-import { useUserName } from './contexts/UserNameProvider';
+import { useUserName } from '../contexts/UserNameProvider';
 import UserList from './userlist/UserList';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     paddingBottom: 64,

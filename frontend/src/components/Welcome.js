@@ -11,7 +11,7 @@ import {
   makeStyles,
 } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { useUserName } from './contexts/UserNameProvider';
+import { useUserName } from '../contexts/UserNameProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,14 +23,6 @@ const useStyles = makeStyles((theme) => ({
     margin: `${theme.spacing(2)} 0`,
   },
 }));
-
-// const innerTheme = createMuiTheme({
-//   palette: {
-//     text: {
-//       secondary: 'black',
-//     },
-//   },
-// });
 
 const Welcome = () => {
   const [roomName, setRoomName] = React.useState();

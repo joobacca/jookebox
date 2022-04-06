@@ -5,9 +5,9 @@ import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
-import { useAppState } from '../contexts/AppStateProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   alignCenter: {
     display: 'flex',
     alignItems: 'center',

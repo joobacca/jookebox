@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core/styles';
 
 import SearchResultList from './SearchResultList';
-import { useSocket } from '../contexts/SocketProvider';
-import { useAppState } from '../contexts/AppStateProvider';
+import { useSocket } from '../../contexts/SocketProvider';
+import { useAppState } from '../../contexts/AppStateProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = React.memo(() => {
+const Search = () => {
   const socket = useSocket();
   const {
     search: { current, set },
@@ -86,6 +86,6 @@ const Search = React.memo(() => {
       </ThemeProvider>
     </Grid>
   );
-});
+};
 
-export default Search;
+export default React.memo(Search);
