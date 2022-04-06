@@ -7,15 +7,17 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const StopWatch = require('./stopwatch');
 
-app.use(cors());
-
 const server = http.createServer(app);
 
 require('dotenv').config();
 
 console.log('Server running.');
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: ['http://localhost:3000'],
+  },
+});
 
 const roomDetails = [];
 
