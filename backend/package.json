@@ -6,7 +6,7 @@
     "express": "^4.17.3",
     "https": "^1.0.0",
     "nodemon": "^2.0.15",
-    "socket.io": "^4.4.1",
+    "socket.io": "^4.5.4",
     "yt-search": "^2.10.3"
   },
   "scripts": {
