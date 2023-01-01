@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { useUserName } from '../contexts/UserNameProvider';
 
 const Welcome = () => {
-  const [roomName, setRoomName] = React.useState();
+  const [roomName, setRoomName] = useState();
   const [userName, setUserName] = useUserName();
   const history = useHistory();
 
