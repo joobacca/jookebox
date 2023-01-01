@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
@@ -34,25 +34,25 @@ function TabPanel(props) {
 }
 
 const Jukebox = () => {
-  const playerRef = React.useRef();
+  const playerRef = useRef();
   const theme = useTheme();
   const location = useLocation();
   const username = useUserName();
   const socket = useSocket();
 
-  const [connection, setConnection] = React.useState(false);
+  const [connection, setConnection] = useState(false);
 
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
 
   const joinedRoom = () => setConnection(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     socket.on('joinedRoom', joinedRoom);
     socket.emit('joinRoom', { room: location.pathname, id: username });
     return () => {
@@ -60,6 +60,7 @@ const Jukebox = () => {
       socket.close();
     };
   }, [socket, location.pathname, username]);
+
   return (
     <AppStateProvider>
       {connection ? (
