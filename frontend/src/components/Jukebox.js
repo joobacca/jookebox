@@ -1,13 +1,13 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useSocket } from '../contexts/SocketProvider';
 import Search from './search/Search';
 import YoutubePlayer from './player/YoutubePlayer';
@@ -16,22 +16,6 @@ import AppStateProvider from '../contexts/AppStateProvider';
 import PlayList from './playlist/PlayList';
 import { useUserName } from '../contexts/UserNameProvider';
 import UserList from './userlist/UserList';
-
-const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    paddingBottom: 64,
-    height: '100%',
-    '& > *': {
-      height: '100%',
-    },
-  },
-  rootMobile: {
-    width: '100%',
-    paddingBottom: 64,
-    height: '100%',
-  },
-}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,7 +35,6 @@ function TabPanel(props) {
 
 const Jukebox = () => {
   const playerRef = React.useRef();
-  const classes = useStyles();
   const theme = useTheme();
   const location = useLocation();
   const username = useUserName();
@@ -81,10 +64,20 @@ const Jukebox = () => {
     <AppStateProvider>
       {connection ? (
         <>
-          <Grid container className={classes.root}>
+          <Box
+            container
+            sx={{
+              width: '100%',
+              paddingBottom: 64,
+              height: '100%',
+              '& > *': {
+                height: '100%',
+              },
+            }}
+          >
             {desktop && (
               <>
-                <Grid md={4} lg={4} xl={3}>
+                <Grid item md={4} lg={4} xl={3}>
                   <Search />
                 </Grid>
                 <Grid item sm={12} md={6} lg={6} xl={6}>
@@ -98,9 +91,13 @@ const Jukebox = () => {
             )}
             {!desktop && (
               <Box
-                className={classes.rootMobile}
                 display="flex"
                 flexDirection="column"
+                sx={{
+                  width: '100%',
+                  paddingBottom: 64,
+                  height: '100%',
+                }}
               >
                 <Box flexGrow={0}>
                   <YoutubePlayer referenz={playerRef} />
@@ -129,7 +126,7 @@ const Jukebox = () => {
                 </Box>
               </Box>
             )}
-          </Grid>
+          </Box>
           <Controller playerRef={playerRef} />
         </>
       ) : (

@@ -1,40 +1,15 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useUserName } from '../contexts/UserNameProvider';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-  container: {
-    display: 'flex',
-    width: '100%',
-    height: '100vh',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  flexHorizontal: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-}));
 
 const Login = () => {
   const [usernameVal, setName] = useState('');
   const [, set] = useUserName();
-  const classes = useStyles();
   const history = useHistory();
 
   const submit = (e) => {
@@ -45,11 +20,19 @@ const Login = () => {
 
   return (
     <Container>
-      <form
+      <Box
+        component="form"
         noValidate
         autoComplete="off"
-        className={classes.container}
         onSubmit={submit}
+        sx={{
+          display: 'flex',
+          width: '100%',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
       >
         <Typography variant="h6" component="p" color="primary">
           Enter a username
@@ -66,7 +49,7 @@ const Login = () => {
             Enter
           </Button>
         </Box>
-      </form>
+      </Box>
     </Container>
   );
 };

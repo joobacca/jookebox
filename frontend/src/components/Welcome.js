@@ -1,33 +1,18 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import {
-  makeStyles,
-} from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { useHistory } from 'react-router-dom';
 import { useUserName } from '../contexts/UserNameProvider';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-  },
-  form: {
-    margin: `${theme.spacing(2)} 0`,
-  },
-}));
 
 const Welcome = () => {
   const [roomName, setRoomName] = React.useState();
   const [userName, setUserName] = useUserName();
-  const classes = useStyles();
   const history = useHistory();
 
   const submit = (e) => {
@@ -37,7 +22,11 @@ const Welcome = () => {
   };
 
   return (
-    <Container maxWidth={'lg'} className={classes.root}>
+    <Container maxWidth={'lg'} sx={{
+      display: 'flex',
+      alignItems: 'center',
+      height: '100%',
+    }}>
       <Grid container>
         <Grid item xs={12} md={6}>
           <Container>
@@ -62,8 +51,8 @@ const Welcome = () => {
               <form
                 noValidate
                 autoComplete="off"
-                className={classes.form}
                 onSubmit={submit}
+                
               >
                 <Grid container spacing={2}>
                   <Grid item xs={6}>

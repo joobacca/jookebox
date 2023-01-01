@@ -1,39 +1,26 @@
 import React from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import useTheme from '@material-ui/core/styles/useTheme';
-import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import useTheme from '@mui/material/styles/useTheme';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { SocketContext } from '../../contexts/SocketProvider';
 
-const useStyles = makeStyles(() => ({
-  secondary: {
-    color: 'black',
-  },
-  primary: {
-    color: '#CE4257',
-  },
-}));
-
-const useListStyles = makeStyles(() => ({
-  wrapper: {
-    height: '100%',
-    maxHeight: 'calc(100vh - 56px)',
-    boxSizing: 'border-box',
-  },
-}));
-
 const SearchResultList = ({ data }) => {
-  const classes = useListStyles();
   return (
-    <List className={classes.wrapper}>
+    <List
+      sx={{
+        height: '100%',
+        maxHeight: 'calc(100vh - 56px)',
+        boxSizing: 'border-box',
+      }}
+    >
       {data.map((el, i) => (
         <React.Fragment key={el.videoId}>
           {i !== 0 && <Divider variant="inset" component="li" />}
@@ -46,7 +33,6 @@ const SearchResultList = ({ data }) => {
 
 const Item = ({ data }) => {
   const socket = React.useContext(SocketContext);
-  const classes = useStyles();
   const theme = useTheme();
   const {
     title,
@@ -64,12 +50,7 @@ const Item = ({ data }) => {
           <Avatar alt={title} src={thumbnail} />
         </ListItemAvatar>
       )}
-      <ListItemText
-        className={{ ...classes.secondary }}
-        classes={{ primary: classes.primary }}
-        primary={title}
-        secondary={description}
-      />
+      <ListItemText color="#000" primary={title} secondary={description} />
       <div>
         <IconButton
           onClick={() =>

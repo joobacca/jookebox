@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 
 export const UserNameContext = React.createContext();
+const COOKIE_NAME = 'jookebox_username';
 
 const UserNameProvider = ({ children }) => {
-  const COOKIE_NAME = 'jookebox_username';
 
   const getCookie = () => {
     let cookieValue = '';

@@ -1,37 +1,18 @@
 import React, { useEffect } from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { useSocket } from '../../contexts/SocketProvider';
 import { useAppState } from '../../contexts/AppStateProvider';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-  playlist: {
-    height: '50%',
-    maxHeight: '50vh',
-    overflow: 'auto',
-  },
-  item: {
-    padding: theme.spacing(1),
-  },
-  paddingRight: {
-    paddingRight: theme.spacing(4),
-  },
-}));
-
-const innerTheme = createMuiTheme({
+const innerTheme = createTheme({
   palette: {
     text: {
       secondary: 'black',
@@ -42,7 +23,6 @@ const innerTheme = createMuiTheme({
 const PlayList = () => {
   const { playList } = useAppState();
   const socket = useSocket();
-  const classes = useStyles();
 
   useEffect(() => {
     socket.emit('getPlayList');
@@ -57,23 +37,26 @@ const PlayList = () => {
   }, [socket, playList]);
 
   return (
-    <div className={classes.root}>
+    <Box sx={{ padding: 2 }}>
       <Typography variant="h5" component="h2" color="secondary">
         Playlist
       </Typography>
       <ThemeProvider theme={innerTheme}>
-        <List className={classes.playlist}>
+        <List
+          sx={{
+            height: '50%',
+            maxHeight: '50vh',
+            overflow: 'auto',
+          }}
+        >
           {playList.current.length === 0 ? (
-            <ListItem className={classes.item}>
+            <ListItem sx={{ padding: 1 }}>
               <Typography>Empty...</Typography>
             </ListItem>
           ) : (
             playList.current.map((el, i) => (
-              <ListItem key={`${el.videoId}-${i}`} className={classes.item}>
-                <ListItemText
-                  primary={el.title}
-                  className={classes.paddingRight}
-                />
+              <ListItem key={`${el.videoId}-${i}`} sx={{ padding: 1 }}>
+                <ListItemText primary={el.title} sx={{ paddingRight: 4 }} />
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
@@ -88,7 +71,7 @@ const PlayList = () => {
           )}
         </List>
       </ThemeProvider>
-    </div>
+    </Box>
   );
 };
 

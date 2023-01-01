@@ -1,31 +1,16 @@
 import React, { useEffect } from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Divider from '@material-ui/core/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { useSocket } from '../../contexts/SocketProvider';
 import { useAppState } from '../../contexts/AppStateProvider';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-  userList: {
-    height: '50%',
-    maxHeight: '50vh',
-    overflow: 'auto',
-  },
-  item: {
-    padding: theme.spacing(1),
-  },
-}));
+import { Box } from '@mui/material';
 
 const UserList = () => {
   const { userList } = useAppState();
   const socket = useSocket();
-  const classes = useStyles();
 
   useEffect(() => {
     socket.emit('getUserList');
@@ -34,32 +19,38 @@ const UserList = () => {
   useEffect(() => {
     const setUserList = (newList) => userList.set(newList);
     socket.on('synchronizeUserList', setUserList);
-    
+
     return () => {
       socket.off('synchronizeUserList', setUserList);
     };
   }, [socket, userList]);
 
   return (
-    <div className={classes.root}>
+    <Box sx={{ padding: 2 }}>
       <Typography variant="h5" component="h2" color="secondary">
         UserList
       </Typography>
-      <List className={classes.userList}>
+      <List
+        sx={{
+          height: '50%',
+          maxHeight: '50vh',
+          overflow: 'auto',
+        }}
+      >
         {userList.current.length === 0 ? (
           <Typography>Empty...</Typography>
         ) : (
           userList.current.map((el, i) => (
             <React.Fragment key={`${el}-${i}`}>
               {i !== 0 && <Divider />}
-              <ListItem button className={classes.item}>
+              <ListItem button sx={{ padding: 1 }}>
                 <ListItemText primary={el} />
               </ListItem>
             </React.Fragment>
           ))
         )}
       </List>
-    </div>
+    </Box>
   );
 };
 

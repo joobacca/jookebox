@@ -1,7 +1,8 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import SocketProvider from './contexts/SocketProvider';
 import UserNameProvider from './contexts/UserNameProvider';
@@ -12,16 +13,7 @@ import Welcome from './components/Welcome';
 import theme from './util/theme';
 import AppStateProvider from './contexts/AppStateProvider';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    height: '100vh !important',
-    overflow: 'hidden',
-  },
-}));
-
 function App() {
-  const classes = useStyles();
-
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -29,7 +21,12 @@ function App() {
         <UserNameProvider>
           <SocketProvider>
             <AppStateProvider>
-              <div className={classes.root}>
+              <Box
+                sx={{
+                  height: '100vh !important',
+                  overflow: 'hidden',
+                }}
+              >
                 <Switch>
                   <Route exact path="/">
                     <Welcome />
@@ -41,7 +38,7 @@ function App() {
                     <Jukebox />
                   </ProtectedRoute>
                 </Switch>
-              </div>
+              </Box>
             </AppStateProvider>
           </SocketProvider>
         </UserNameProvider>

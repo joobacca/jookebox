@@ -1,67 +1,26 @@
 import React, { useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import ToolBar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/core/Slider';
-import { withStyles, makeStyles } from '@material-ui/styles';
-import Pause from '@material-ui/icons/PauseCircleFilledRounded';
-import Play from '@material-ui/icons/PlayCircleFilledRounded';
+import AppBar from '@mui/material/AppBar';
+import ToolBar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Slider from '@mui/material/Slider';
+import Pause from '@mui/icons-material/PauseCircleFilledRounded';
+import Play from '@mui/icons-material/PlayCircleFilledRounded';
 import Volume from './Volume';
-import FastForward from '@material-ui/icons/FastForwardRounded';
+import FastForward from '@mui/icons-material/FastForwardRounded';
 import throttle from 'lodash/throttle';
 import { useSocket } from '../../contexts/SocketProvider';
 import { useAppState } from '../../contexts/AppStateProvider';
 
-const useStyles = makeStyles(() => ({
-  appBar: {
-    top: 'auto',
-    bottom: 0,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  slider: {
-    '& .MuiSlider-thumb': {
-      transition: 'left 1s linear',
-    },
-    '& .MuiSlider-thumb.MuiSlider-active': {
-      transition: 'left 0s linear',
-    },
-    '& .MuiSlider-track': {
-      transition: 'width 1s linear',
-    },
-  },
-  alignCenter: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  iconColor: {
-    color: '#fff',
-  },
-  flex: {
-    display: 'flex',
-  },
-}));
-
-
-const Progress = withStyles({
-  root: {
-    color: '#fff',
-    height: '100%',
-  },
-})(Slider);
-
 const Controller = ({ playerRef }) => {
   const socket = useSocket();
   const { video, playBackState } = useAppState();
-  const classes = useStyles();
   const [progress, setProgress] = React.useState(0);
 
   useEffect(() => {
     socket.emit('synchronizeApp');
   }, [socket]);
-  
+
   useEffect(() => {
     const playVideo = (newVideo) => {
       playBackState.set(true);
@@ -119,22 +78,38 @@ const Controller = ({ playerRef }) => {
   }, 500);
 
   return (
-    <AppBar position="fixed" className={classes.appBar} color="primary">
+    <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
       <ToolBar>
-        <Grid container spacing={2} className={classes.alignCenter}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ display: 'flex', alignItems: 'center' }}
+        >
           <Volume />
-          <Grid item xs className={classes.alignCenter}>
-            <Progress
-              className={classes.slider}
+          <Grid item xs sx={{ display: 'flex', alignItems: 'center' }}>
+            <Slider
               min={0}
               max={video.current.duration || 100}
               value={progress}
               onChange={handleProgressClick}
+              sx={{
+                '& .MuiSlider-thumb': {
+                  transition: 'left 1s linear',
+                },
+                '& .MuiSlider-thumb.MuiSlider-active': {
+                  transition: 'left 0s linear',
+                },
+                '& .MuiSlider-track': {
+                  transition: 'width 1s linear',
+                },
+                color: '#fff',
+                height: '100%',
+              }}
             />
-            <IconButton onClick={togglePlayback} className={classes.iconColor}>
+            <IconButton onClick={togglePlayback}>
               {playBackState.current ? <Pause /> : <Play />}
             </IconButton>
-            <IconButton onClick={nextVideo} className={classes.iconColor}>
+            <IconButton onClick={nextVideo}>
               <FastForward />
             </IconButton>
           </Grid>
